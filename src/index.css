@@ -25,3 +25,30 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+
+
+.recharts-tooltip-wrapper .custom-tooltip {
+  width: 300px;
+  margin: 0;
+  line-height: 24px;
+  border: 1px solid #f5f5f5;
+  background-color: hsla(0,0%,100%,.8);
+  padding: 10px
+}
+
+.recharts-tooltip-wrapper .custom-tooltip .label {
+  margin: 0;
+  color: #666;
+  font-weight: 700
+}
+
+.recharts-tooltip-wrapper .custom-tooltip .desc {
+  margin: 0;
+  color: #999
+}
+
+.recharts-tooltip-wrapper .custom-tooltip .intro {
+  border-top: 1px solid #f5f5f5;
+  margin: 0
+}

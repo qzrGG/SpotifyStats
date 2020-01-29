@@ -1,5 +1,5 @@
 export interface ListeningEntry {
-    endTime: Date;
+    endTime: string;
     artistName: string;
     trackName: string;
     msPlayed: number;

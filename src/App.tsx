@@ -4,7 +4,7 @@ import './App.css';
 import { Layout } from './components/Layout';
 import { Route } from 'react-router';
 import { Home } from './components/Home';
-import { Counter } from './components/Counter';
+import { Stats } from './components/Stats';
 import { BrowserRouter } from 'react-router-dom';
 
 const App: React.FC = () => {
@@ -14,7 +14,7 @@ const App: React.FC = () => {
     <BrowserRouter basename={baseUrl}>
       <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
+        <Route path='/stats' component={Stats} />
       </Layout>
     </BrowserRouter>
   );
