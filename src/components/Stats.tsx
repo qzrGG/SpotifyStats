@@ -193,7 +193,7 @@ export class Stats extends Component<StatsProps, StatsState> {
 }
 
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload) {
     console.log(payload);
     return (
