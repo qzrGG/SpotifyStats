@@ -71,3 +71,9 @@ code {
   outline: none;
   transition: border .24s ease-in-out;
 }
+
+.instructions {
+  font-size: xx-large;
+  list-style-position: inside;
+  list-style-type: decimal;
+}
