@@ -36,28 +36,23 @@ export class Stats extends Component<StatsProps, StatsState> {
   }
 
   render() {
-    return (
-      <div>
-        <h1>Stats</h1>
-        {this.state.listeningHistory.length === 0
-          ?
-          <Dropzone onDrop={this.loadFiles}>
-            {({ getRootProps, getInputProps }) => (
-              <section>
-                <div {...getRootProps({ className: 'dropzone' })}>
-                  <input {...getInputProps()} />
-                  <p>Drag and drop your StreamingHistory#.json files here, or click to select files</p>
-                </div>
-              </section>
-            )}
-          </Dropzone>
-          :
-          <React.Fragment>
-            <Chart listeningHistory={this.state.listeningHistory} />
-            <Table listeningHistory={this.state.listeningHistory} />
-          </React.Fragment>
-        }
-      </div>
-    );
+    return this.state.listeningHistory.length === 0
+      ? (
+        <Dropzone onDrop={this.loadFiles}>
+          {({ getRootProps, getInputProps }) => (
+            <section>
+              <div {...getRootProps({ className: 'dropzone' })}>
+                <input {...getInputProps()} />
+                <p>Drag and drop your StreamingHistory#.json files here, or click to select files</p>
+              </div>
+            </section>
+          )}
+        </Dropzone>
+      ) : (
+        <React.Fragment>
+          <Chart listeningHistory={this.state.listeningHistory} />
+          <Table listeningHistory={this.state.listeningHistory} />
+        </React.Fragment>
+      );
   }
 }

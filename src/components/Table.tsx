@@ -36,8 +36,8 @@ export class Table extends Component<TabProps, TabState> {
       <React.Fragment>
 
         <ButtonGroup className="d-flex">
-          <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.setState({ ... this.state, tableFuncId: 0 })}>Favourite tracks</Button>
-          <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.setState({ ... this.state, tableFuncId: 1 })}>Favourite artists</Button>
+          <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, tableFuncId: 0 })}>Favourite tracks</Button>
+          <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, tableFuncId: 1 })}>Favourite artists</Button>
         </ButtonGroup>
 
         <ReactTable

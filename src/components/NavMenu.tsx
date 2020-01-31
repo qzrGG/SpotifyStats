@@ -34,7 +34,7 @@ export class NavMenu extends Component<NavMenuProps, NavMenuState> {
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
           <Container>
-            <NavbarBrand tag={Link} to="/"><img src='./logo192.png' height="40px" /> Your Spotify Stats</NavbarBrand>
+            <NavbarBrand tag={Link} to="/"><img src='./logo192.png' height="40px" alt="Logo" /> Your Spotify Stats</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">

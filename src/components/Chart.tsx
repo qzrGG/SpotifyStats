@@ -38,9 +38,9 @@ export class Chart extends Component<ChartProps, ChartState> {
     return (
       <React.Fragment>
         <ButtonGroup className="d-flex">
-          <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ ... this.state, chartFuncId: 0 })} >Hours</Button>
-          <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ ... this.state, chartFuncId: 1 })}>Days of week</Button>
-          <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ ... this.state, chartFuncId: 2 })}>Months</Button>
+          <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 0 })} >Hours</Button>
+          <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 1 })}>Days of week</Button>
+          <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 2 })}>Months</Button>
         </ButtonGroup>
 
         <LineChart
