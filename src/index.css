@@ -20,14 +20,6 @@ code {
   color: #E01A76;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-
-
 .recharts-tooltip-wrapper .custom-tooltip {
   width: 300px;
   margin: 0;

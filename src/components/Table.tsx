@@ -38,7 +38,7 @@ export class Table extends Component<TabProps, TabState> {
     return (
       <React.Fragment>
 
-        <ButtonGroup className="d-flex" style={{ marginBottom: 20 }}>
+        <ButtonGroup className="d-flex" style={{ marginBottom: 20 }} size="lg">
           <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, tableFuncId: 0 })}>Favourite tracks</Button>
           <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, tableFuncId: 1 })}>Favourite artists</Button>
         </ButtonGroup>
@@ -71,6 +71,7 @@ export class Table extends Component<TabProps, TabState> {
           ]}
           defaultPageSize={20}
           className="-striped -highlight"
+          style={{marginBottom: 50}}
         />
       </React.Fragment>
     )

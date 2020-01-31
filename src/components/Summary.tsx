@@ -2,6 +2,7 @@ import React from "react";
 import { ListeningEntry } from "../models/listeningEntry";
 import { from } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
+import { Row, Col } from "reactstrap";
 
 const Summary: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
   const data = from(props.listeningHistory);
@@ -36,18 +37,22 @@ const Summary: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
 
   return (
     <React.Fragment>
-      <p className="text-center" style={{ fontSize: "x-large", marginBottom: 100 }}>
+      <p className="text-center" style={{ fontSize: "x-large" }}>
         In the last year you've listened to <br />
         <span className="display-2">{summary.totalPlayCount} tracks</span>  <br />
         for a total of <br /><span className="display-2">{summary.totalListeningTimeMinutes} minutes</span>  <br />
-        or <span className="display-3"> {summary.totalListeningTimeSummary}</span>. <br />
-        <br />
-        There are <span className="display-4">{summary.differentTracks}</span> different tracks<br />
-        and <span className="display-4">{summary.differentArtists}</span> different artists in your streaming history. <br />
-        <br />
-        Your top 10% artists and tracks are responsible respectively for <span className="display-3">{Math.round(summary.top10artistsShare * 1000) / 10}% </span> <br />
-        and <span className="display-3">{Math.round(summary.top10tracksShare * 1000) / 10}% </span> of all your streams.
-      </p>
+        or <span className="display-3"> {summary.totalListeningTimeSummary}</span>.
+        </p>
+      <Row style={{ fontSize: "x-large", marginBottom: 100, textAlign: "center" }}>
+        <Col sm={6}>
+          There are <span className="display-3">{summary.differentTracks}</span> different tracks
+          and <span className="display-3">{summary.differentArtists}</span> different artists in your streaming history.
+          </Col>
+        <Col sm={6}>
+          Your top 10% artists and tracks are responsible respectively for <span className="display-3">{Math.round(summary.top10artistsShare * 1000) / 10}% </span>
+          and <span className="display-3">{Math.round(summary.top10tracksShare * 1000) / 10}% </span> of all your streams.
+          </Col>
+      </Row>
     </React.Fragment >
   );
 }

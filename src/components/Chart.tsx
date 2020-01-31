@@ -48,7 +48,7 @@ export class Chart extends Component<ChartProps, ChartState> {
   render() {
     return (
       <React.Fragment>
-        <ButtonGroup className="d-flex">
+        <ButtonGroup className="d-flex" size="lg">
           <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 0 })}>Hours</Button>
           <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 1 })}>Days of week</Button>
           <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 2 })}>Months</Button>
@@ -64,7 +64,7 @@ export class Chart extends Component<ChartProps, ChartState> {
             <XAxis dataKey={this.xAxisFuncs[this.state.chartFuncId]} />
             <YAxis />
             <Tooltip content={CustomTooltip} />
-            <Line type="monotone" dataKey="totalTime" stroke="#8884d8" />
+            <Line type="monotone" dataKey="totalTime" stroke="#00d76f" strokeWidth={5} />
           </LineChart>
         </ResponsiveContainer>
       </React.Fragment >);
