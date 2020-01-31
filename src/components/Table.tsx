@@ -22,20 +22,23 @@ export class Table extends Component<TabProps, TabState> {
     this.state = { tableFuncId: 0 };
   }
 
-  tableData = () => from(this.props.listeningHistory).groupBy(this.tableFuncs[this.state.tableFuncId]).select(x => {
-    return {
-      trackName: x.first().trackName,
-      artistName: x.first().artistName,
-      playedTimes: x.count(),
-      totalListeningTime: Math.round(x.sum(x => x.msPlayed) / 60000)
-    }
-  }).toArray();
+  tableData = () => from(this.props.listeningHistory)
+    .groupBy(this.tableFuncs[this.state.tableFuncId])
+    .select(x => {
+      return {
+        trackName: x.first().trackName,
+        artistName: x.first().artistName,
+        playedTimes: x.count(),
+        totalListeningTime: Math.round(x.sum(x => x.msPlayed) / 60000)
+      }
+    })
+    .toArray();
 
   render() {
     return (
       <React.Fragment>
 
-        <ButtonGroup className="d-flex">
+        <ButtonGroup className="d-flex" style={{ marginBottom: 20 }}>
           <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, tableFuncId: 0 })}>Favourite tracks</Button>
           <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, tableFuncId: 1 })}>Favourite artists</Button>
         </ButtonGroup>

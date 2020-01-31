@@ -26,7 +26,9 @@ export class Stats extends Component<StatsProps, StatsState> {
 
         let fileReader = new FileReader();
         fileReader.onloadend = (e) => {
-          let ls = JSON.parse(fileReader.result as string).filter((x: ListeningEntry) => x.msPlayed > 60000 && x.msPlayed < 600000);
+          let ls: ListeningEntry[] = JSON.parse(fileReader.result as string);
+          ls = ls.filter((x: ListeningEntry) => x.msPlayed > 60000 && x.msPlayed < 600000);
+          ls.forEach(x => x.date = new Date(x.endTime.replace(" ", "T") + ":00.000Z"));
           this.setState({ ...this.state, listeningHistory: [...this.state.listeningHistory, ...ls] });
         }
 
