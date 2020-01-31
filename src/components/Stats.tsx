@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import { ListeningEntry } from '../models/listeningEntry';
 import { Table } from './Table';
 import { Chart } from './Chart';
+import Summary from './Summary';
 
 export interface StatsProps {
 }
@@ -52,6 +53,7 @@ export class Stats extends Component<StatsProps, StatsState> {
         </Dropzone>
       ) : (
         <React.Fragment>
+          <Summary listeningHistory={this.state.listeningHistory} />
           <Chart listeningHistory={this.state.listeningHistory} />
           <Table listeningHistory={this.state.listeningHistory} />
         </React.Fragment>

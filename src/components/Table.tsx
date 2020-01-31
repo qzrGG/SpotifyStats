@@ -6,7 +6,7 @@ import { ButtonGroup, Button } from "reactstrap";
 import ReactTable from "react-table-6";
 import "react-table-6/react-table.css";
 
-export interface TabProps {
+interface TabProps {
   listeningHistory: ListeningEntry[];
 }
 

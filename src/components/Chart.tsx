@@ -4,6 +4,7 @@ import { ButtonGroup, Button } from "reactstrap";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip, ResponsiveContainer } from "recharts";
 import { ListeningEntry } from "../models/listeningEntry";
 import { from } from "linq-to-typescript";
+import Comparer from "../models/Comparer";
 
 export interface ChartProps {
   listeningHistory: ListeningEntry[];
@@ -32,17 +33,16 @@ export class Chart extends Component<ChartProps, ChartState> {
     this.state = { chartFuncId: 0 };
   }
 
+
   chartData = () => from(this.props.listeningHistory)
     .groupBy(x => this.chartFuncs[this.state.chartFuncId](x.date))
-    .select(g => {
-      return {
-        name: g.key,
-        totalTime: Math.round(g.sum(x => x.msPlayed) / 60000),
-        totalPlaybacks: g.count(),
-        mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count()).first().key,
-        mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count()).first().key,
-      };
-    })
+    .select(g => ({
+      name: g.key,
+      totalTime: Math.round(g.sum(x => x.msPlayed) / 60000),
+      totalPlaybacks: g.count(),
+      mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count(), Comparer).first().key,
+      mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count(), Comparer).first().key
+    }))
     .toArray();
 
   render() {
