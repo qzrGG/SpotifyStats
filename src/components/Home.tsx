@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 export class Home extends Component {
@@ -14,7 +13,7 @@ export class Home extends Component {
           <li>Request a copy of your data</li>
           <li>Wait a couple of days</li>
           <li>Check your inbox and download the data</li>
-          <li>Unzip and add your <i>StreamingHistory#.json</i> files <a href="/stats">HERE</a></li>
+          <li>Unzip and add your <i>StreamingHistory#.json</i> files <Link to="/stats">HERE</Link></li>
         </ol>
       </div>
     );
