@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDropzone from 'react-dropzone';
+import Dropzone from 'react-dropzone';
 
 import { ListeningEntry } from '../models/listeningEntry';
 import ReactTable from "react-table-6";
@@ -15,15 +15,18 @@ export interface StatsProps {
 
 export interface StatsState {
   listeningEntries: ListeningEntry[];
-  chartFunc: (date: Date) => number | string;
+  chartFuncId: number;
+  tableFuncId: number;
 }
 
 export class Stats extends Component<StatsProps, StatsState> {
   static displayName = Stats.name;
+  chartFuncs = [(x: Date) => x.getHours(), (x: Date) => x.getDay() + 1, (x: Date) => x.getMonth() + 1]
+  tableFuncs = [(x: ListeningEntry) => x.trackName + x.artistName, (x: ListeningEntry) => x.artistName]
 
   constructor(props: Readonly<StatsProps>) {
     super(props);
-    this.state = { listeningEntries: [], chartFunc: x => x.getHours() };
+    this.state = { listeningEntries: [], chartFuncId: 0, tableFuncId: 0 };
   }
 
   loadFiles = (files: File[]) => {
@@ -42,7 +45,7 @@ export class Stats extends Component<StatsProps, StatsState> {
     });
   }
 
-  songsData = () => from(this.state.listeningEntries).groupBy(x => x.trackName + x.artistName).select(x => {
+  tableData = () => from(this.state.listeningEntries).groupBy(this.tableFuncs[this.state.tableFuncId]).select(x => {
     return {
       trackName: x.first().trackName,
       artistName: x.first().artistName,
@@ -51,16 +54,8 @@ export class Stats extends Component<StatsProps, StatsState> {
     }
   }).toArray();
 
-  artistsData = () => from(this.state.listeningEntries).groupBy(x => x.artistName).select(x => {
-    return {
-      artistName: x.first().artistName,
-      playedTimes: x.count(),
-      totalListeningTime: Math.round(x.sum(x => x.msPlayed) / 60000)
-    }
-  }).toArray();
-
   chartData = () => from(this.state.listeningEntries)
-    .groupBy(x => this.state.chartFunc(new Date(x.endTime)))
+    .groupBy(x => this.chartFuncs[this.state.chartFuncId](new Date(x.endTime)))
     .select(g => {
       return {
         name: g.key,
@@ -70,128 +65,87 @@ export class Stats extends Component<StatsProps, StatsState> {
         mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count()).first().key,
       };
     })
-
     .toArray();
 
-  changeChartFunc = (x: any) => {
-    const type = x.target.value;
-    switch (type) {
-      case "Hours": this.setState({ ... this.state, chartFunc: x => x.getHours() }); break;
-      case "Days of week": this.setState({ ... this.state, chartFunc: x => x.getDay() }); break;
-      case "Weeks": this.setState({ ... this.state, chartFunc: x => x.getDate() }); break;//todo
-      case "Months": this.setState({ ... this.state, chartFunc: x => x.getMonth() }); break;
-    }
-  }
   render() {
     return (
       <div>
         <h1>Stats</h1>
+        {this.state.listeningEntries.length === 0
+          ?
+          <Dropzone onDrop={this.loadFiles}>
+            {({ getRootProps, getInputProps }) => (
+              <section>
+                <div {...getRootProps({ className: 'dropzone' })}>
+                  <input {...getInputProps()} />
+                  <p>Drag and drop your StreamingHistory#.json files here, or click to select files</p>
+                </div>
+              </section>
+            )}
+          </Dropzone>
 
-        <ReactDropzone onDrop={this.loadFiles}>
-          {({ getRootProps, getInputProps }) => (
-            <section>
-              <div {...getRootProps()}>
-                <input {...getInputProps()} />
-                <p>Drag 'n' drop some files here, or click to select files</p>
-              </div>
-            </section>
-          )}
-        </ReactDropzone>
+          :
+          <React.Fragment>
+            <ButtonGroup className="d-flex">
+              <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ ... this.state, chartFuncId:0 })} >Hours</Button>
+              <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ ... this.state, chartFuncId: 1 })}>Days of week</Button>
+              <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ ... this.state, chartFuncId: 2 })}>Months</Button>
+            </ButtonGroup>
 
-        <ButtonGroup>
-          <Button color="primary" onClick={() => this.setState({ ... this.state, chartFunc: x => x.getHours() })} >Hours</Button>
-          <Button color="primary" onClick={() => this.setState({ ... this.state, chartFunc: x => x.getDay() + 1 })}>Days of week</Button>
-          <Button color="primary" onClick={() => this.setState({ ... this.state, chartFunc: x => x.getMonth() + 1 })}>Months</Button>
-        </ButtonGroup>
-        {/* <div onChange={this.changeChartFunc}>
-                <input type="radio" value="Hours" name="type" /> Hours
-          <input type="radio" value="Days of week" name="type" />
-                <input type="radio" value="Weeks" name="type" />
-                <input type="radio" value="Months" name="type" />
+            <LineChart
+              width={1100}
+              height={500}
+              data={this.chartData()}
+              margin={{
+                top: 25, right: 20, left: 20, bottom: 50,
+              }}
+            >
+              <CartesianGrid strokeDasharray="5 5" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip content={CustomTooltip} />
+              <Line type="monotone" dataKey="totalTime" stroke="#8884d8" />
+            </LineChart>
 
-              </div> */}
-        <LineChart
-          width={1100}
-          height={500}
-          data={this.chartData()}
-          margin={{
-            top: 5, right: 30, left: 20, bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="5 5" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip content={CustomTooltip} />
-          <Legend />
-          <Line type="monotone" dataKey="totalTime" stroke="#8884d8" />
-        </LineChart>
-        <ReactTable
-          data={this.songsData()}
-          columns={[
+            <ButtonGroup className="d-flex">
+              <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.setState({ ... this.state, tableFuncId:0 })} >Favourite tracks</Button>
+              <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.setState({ ... this.state, tableFuncId: 1 })}>Favourite artists</Button>
+            </ButtonGroup>
 
-            {
-              Header: "artistName",
-              accessor: "artistName"
-            },
-            {
-              Header: "trackName",
-              accessor: "trackName"
-            },
-            {
-              Header: "playedTimes",
-              accessor: "playedTimes"
-            },
-            {
-              Header: "totalListeningTime minutes",
-              accessor: "totalListeningTime"
-            }
-
-
-          ]}
-          defaultSorted={[
-            {
-              id: "playedTimes",
-              desc: true
-            }
-          ]}
-          defaultPageSize={20}
-          className="-striped -highlight table"
-        />
-
-        <ReactTable
-          data={this.artistsData()}
-          columns={[
-
-            {
-              Header: "artistName",
-              accessor: "artistName"
-            },
-            {
-              Header: "playedTimes",
-              accessor: "playedTimes"
-            },
-            {
-              Header: "totalListeningTime minutes",
-              accessor: "totalListeningTime"
-            }
-
-
-          ]}
-          defaultSorted={[
-            {
-              id: "playedTimes",
-              desc: true
-            }
-          ]}
-          defaultPageSize={20}
-          className="-striped -highlight table"
-        />
-
+            <ReactTable
+              data={this.tableData()}
+              columns={[
+                {
+                  Header: "Artist Name",
+                  accessor: "artistName"
+                },
+                {
+                  Header: "Track Name",
+                  accessor: "trackName"
+                },
+                {
+                  Header: "Play Count",
+                  accessor: "playedTimes"
+                },
+                {
+                  Header: "Listening Time (minutes)",
+                  accessor: "totalListeningTime"
+                }
+              ].filter(x => this.state.tableFuncId === 0 ? true : x.accessor !== "trackName")}
+              defaultSorted={[
+                {
+                  id: "playedTimes",
+                  desc: true
+                }
+              ]}
+              defaultPageSize={20}
+              className="-striped -highlight"
+            />
+          </React.Fragment>}
       </div>
     );
   }
 }
-
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload) {
