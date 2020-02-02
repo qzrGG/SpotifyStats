@@ -1,0 +1,31 @@
+.data-cell {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.75rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.data-header {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid #dee2e6;
+  border-top: 2px solid #dee2e6;
+}
+
+.data-header div {
+  padding: 0.75rem;
+}
+
+.data-header div:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.data-header .order-by {
+  color: #33c17d;
+}
+
+.data-items {
+  border-bottom: 2px solid #dee2e6;
+  margin-bottom: 50px;
+}
