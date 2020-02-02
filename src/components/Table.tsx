@@ -104,8 +104,8 @@ export class Table extends Component<TabProps, TabState> {
 
     const Row = ({ index, style }: any) => (
       <div className="d-flex" style={style}>
-        {columns.map((x, i) => (
-          <div key={i} style={x.style} className="data-cell">{x.selector(data[index])}</div>
+        {columns.map((x) => (
+          <div key={x.header} style={x.style} className="data-cell">{x.selector(data[index])}</div>
         ))}
       </div>
     );

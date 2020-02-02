@@ -11,6 +11,7 @@ export interface StatsProps {
 
 export interface StatsState {
   listeningHistory: ListeningEntry[];
+  progress: number;
 }
 
 export class Stats extends Component<StatsProps, StatsState> {
@@ -18,29 +19,33 @@ export class Stats extends Component<StatsProps, StatsState> {
 
   constructor(props: Readonly<StatsProps>) {
     super(props);
-    this.state = { listeningHistory: [] };
+    this.state = { listeningHistory: [], progress: 0 };
   }
 
   loadFiles = (files: File[]) => {
-    this.setState({ ...this.state, listeningHistory: [] }, () => {
-      files.forEach(f => {
-        if (!f.name.startsWith("StreamingHistory")) return;
-
+    let result: ListeningEntry[] = [];
+    let loadedFiles = 0;
+    const filesToLoad = files.filter(x => x.name.startsWith("StreamingHistory"));
+    this.setState({ ...this.state, progress: 1 }, () =>
+      filesToLoad.forEach(f => {
         let fileReader = new FileReader();
         fileReader.onloadend = (e) => {
           let ls: ListeningEntry[] = JSON.parse(fileReader.result as string);
           ls = ls.filter((x: ListeningEntry) => x.msPlayed > 60000 && x.msPlayed < 600000);
           ls.forEach(x => x.date = new Date(x.endTime.replace(" ", "T") + ":00.000Z"));
-          this.setState({ ...this.state, listeningHistory: [...this.state.listeningHistory, ...ls] });
+          result = [...result, ...ls];
+          loadedFiles = loadedFiles + 1;
+          if (loadedFiles === filesToLoad.length) 
+            this.setState({ ...this.state, listeningHistory: result, progress: 2 });
         }
 
         fileReader.readAsText(f);
-      });
-    });
+      })
+    );
   }
 
   render() {
-    return this.state.listeningHistory.length === 0
+    return this.state.progress === 0
       ? (
         <Dropzone onDrop={this.loadFiles}>
           {({ getRootProps, getInputProps }) => (
@@ -50,7 +55,10 @@ export class Stats extends Component<StatsProps, StatsState> {
             </div>
           )}
         </Dropzone>
-      ) : (
+      ) : this.state.progress === 1 ? (
+        <h2 className="text-center display-4">Loading...</h2>
+      ) :     
+      (
         <React.Fragment>
           <section id="summary">
             <Summary listeningHistory={this.state.listeningHistory} />
