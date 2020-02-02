@@ -52,7 +52,6 @@ code {
   align-items: center;
   justify-content: center;
   height: 200px;
-  margin-bottom: 50px;
   padding: 20px;
   border-width: 2px;
   border-radius: 2px;
@@ -62,6 +61,7 @@ code {
   color: #bdbdbd;
   outline: none;
   transition: border .24s ease-in-out;
+  font-size: larger;
 }
 
 .instructions {

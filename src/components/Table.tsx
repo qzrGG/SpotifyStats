@@ -104,8 +104,8 @@ export class Table extends Component<TabProps, TabState> {
 
     const Row = ({ index, style }: any) => (
       <div className="d-flex" style={style}>
-        {columns.map((x) => (
-          <div style={x.style} className="data-cell">{x.selector(data[index])}</div>
+        {columns.map((x, i) => (
+          <div key={i} style={x.style} className="data-cell">{x.selector(data[index])}</div>
         ))}
       </div>
     );
@@ -136,25 +136,26 @@ export class Table extends Component<TabProps, TabState> {
 
     return (
       <React.Fragment>
+        <h2 className="display-4 mb-4">Your favourites</h2>
 
-        <ButtonGroup className="d-flex" style={{ marginBottom: 20 }} size="lg">
+        <ButtonGroup className="d-flex mb-3" size="lg">
           <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.typeChanged(0)}>Favourite tracks</Button>
           <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.typeChanged(1)}>Favourite artists</Button>
         </ButtonGroup>
 
-        <input type="text" className="form-control" placeholder="Search" style={{ marginBottom: 20, borderRadius: 50 }}
+        <input type="text" className="form-control mb-3" placeholder="Search" style={{ borderRadius: 50 }}
           onChange={e => this.setState({ ...this.state, searchPhrase: e.target.value })}
         />
 
         <div className="data-header">
           {columns.map((x, i) => (
-            <div className={this.state.orderByColumn === i ? "order-by" : ""} style={x.style} onClick={() => this.orderByChanged(i)}>{x.header}</div>
+            <div key={i} className={this.state.orderByColumn === i ? "order-by" : ""} style={x.style} onClick={() => this.orderByChanged(i)}>{x.header}</div>
           ))}
         </div>
 
-        <div className="data-items">
+        <div className="data-items mb-2">
           <FixedSizeList
-            height={600}
+            height={490}
             itemCount={data.length}
             itemSize={49}
             width="100%"
@@ -163,6 +164,7 @@ export class Table extends Component<TabProps, TabState> {
             {Row}
           </FixedSizeList>
         </div>
+        <p>Items in total: {data.length}</p>
 
       </React.Fragment>
     );

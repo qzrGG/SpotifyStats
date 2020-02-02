@@ -48,12 +48,14 @@ export class Chart extends Component<ChartProps, ChartState> {
   render() {
     return (
       <React.Fragment>
+        <h2 className="display-4 mb-4">Music over time</h2>
+        
         <ButtonGroup className="d-flex" size="lg">
           <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 0 })}>Hours</Button>
           <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 1 })}>Days of week</Button>
           <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 2 })}>Months</Button>
         </ButtonGroup>
-        <ResponsiveContainer width="100%" height={500}>
+        <ResponsiveContainer width="100%" height="70%">
           <LineChart
             data={this.chartData()}
             margin={{

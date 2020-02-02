@@ -4,6 +4,7 @@ import { ListeningEntry } from '../models/listeningEntry';
 import { Table } from './Table';
 import { Chart } from './Chart';
 import Summary from './Summary';
+import "./Stats.css";
 
 export interface StatsProps {
 }
@@ -43,19 +44,23 @@ export class Stats extends Component<StatsProps, StatsState> {
       ? (
         <Dropzone onDrop={this.loadFiles}>
           {({ getRootProps, getInputProps }) => (
-            <section>
-              <div {...getRootProps({ className: 'dropzone' })}>
-                <input {...getInputProps()} />
-                <p>Drag and drop your StreamingHistory#.json files here, or click to select files</p>
-              </div>
-            </section>
+            <div {...getRootProps({ className: 'dropzone' })}>
+              <input {...getInputProps()} />
+              <p>Drag and drop your StreamingHistory#.json files here, or click to select files</p>
+            </div>
           )}
         </Dropzone>
       ) : (
         <React.Fragment>
-          <Summary listeningHistory={this.state.listeningHistory} />
-          <Chart listeningHistory={this.state.listeningHistory} />
-          <Table listeningHistory={this.state.listeningHistory} />
+          <section id="summary">
+            <Summary listeningHistory={this.state.listeningHistory} />
+          </section>
+          <section id="chart">
+            <Chart listeningHistory={this.state.listeningHistory} />
+          </section>
+          <section id="table">
+            <Table listeningHistory={this.state.listeningHistory} />
+          </section>
         </React.Fragment>
       );
   }
