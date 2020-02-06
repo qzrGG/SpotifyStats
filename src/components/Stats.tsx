@@ -37,8 +37,11 @@ export class Stats extends Component<StatsProps, StatsState> {
           ls.forEach(x => x.date = new Date(x.endTime.replace(" ", "T") + ":00.000Z"));
           result = [...result, ...ls];
           loadedFiles = loadedFiles + 1;
-          if (loadedFiles === filesToLoad.length) 
+          if (loadedFiles === filesToLoad.length)
             this.setState({ ...this.state, listeningHistory: result, progress: 2 });
+            let summary = document.getElementById('summary');
+            if (summary)
+              summary!.scrollIntoView()
         }
 
         fileReader.readAsText(f);
@@ -59,25 +62,25 @@ export class Stats extends Component<StatsProps, StatsState> {
         </Dropzone>
       ) : this.state.progress === 1 ? (
         <h2 className="text-center display-4">Loading...</h2>
-      ) :     
-      (
-        <React.Fragment>
-          <section id="summary">
-            <Summary listeningHistory={this.state.listeningHistory} />
-          </section>
-          <section id="otherUnits">
-            <OtherUnits listeningHistory={this.state.listeningHistory} />
-          </section>
-          <section id="attachment">
-            <Attachment listeningHistory={this.state.listeningHistory} />
-          </section>
-          <section id="chart">
-            <Chart listeningHistory={this.state.listeningHistory} />
-          </section>
-          <section id="table">
-            <Table listeningHistory={this.state.listeningHistory} />
-          </section>
-        </React.Fragment>
-      );
+      ) :
+        (
+          <React.Fragment>
+            <section id="summary">
+              <Summary listeningHistory={this.state.listeningHistory} />
+            </section>
+            <section id="otherUnits">
+              <OtherUnits listeningHistory={this.state.listeningHistory} />
+            </section>
+            <section id="attachment">
+              <Attachment listeningHistory={this.state.listeningHistory} />
+            </section>
+            <section id="chart">
+              <Chart listeningHistory={this.state.listeningHistory} />
+            </section>
+            <section id="table">
+              <Table listeningHistory={this.state.listeningHistory} />
+            </section>
+          </React.Fragment>
+        );
   }
 }

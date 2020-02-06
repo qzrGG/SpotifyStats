@@ -43,7 +43,7 @@ const Attachment: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => 
 
   return (
     <React.Fragment>
-      <span className="display-4 mb-4">Attachment</span>
+      <span className="section-header mb-4">Attachment</span>
 
       <p className="text-center" style={{ fontSize: "large" }}>
         There are <span className="display-4">{differentArtists}</span> different artists

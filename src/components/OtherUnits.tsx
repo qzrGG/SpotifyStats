@@ -10,7 +10,7 @@ const OtherUnits: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => 
   let round = (x: number, precision: number) => (Math.round(x * Math.pow(10, precision)) / Math.pow(10, precision)).toLocaleString();
 
   return (
-    <div style={{fontSize: "x-large"}}>
+    <div style={{fontSize: "x-large", fontWeight: 300}}>
       <span className="section-header mb-4">In other words...</span>
       <p>{round(totalListeningTime, 0)} minutes is a lot. In this time</p>
       <ul>
@@ -19,7 +19,7 @@ const OtherUnits: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => 
         <li>light travels {round(totalListeningTime * 17987547.48, 0)} kilometers</li>
         <li>on average {round(totalListeningTime * 250, 0)} babies are born</li>
       </ul>
-      <p>If you have a healthy 8 hours sleep a day you've spent {round(totalListeningTime / 3504, 2)}% of last year's awake time listening to music.</p>
+      <p>If you have a healthy 8 hours of sleep a day you've spent {round(totalListeningTime / 3504, 2)}% of last year's awake time listening to music.</p>
     </div>
   );
 }
