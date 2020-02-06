@@ -2,7 +2,6 @@ import React from "react";
 import { ListeningEntry } from "../models/listeningEntry";
 import { from } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
-import { Row, Col } from "reactstrap";
 
 const Summary: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
   const data = from(props.listeningHistory);
@@ -37,24 +36,14 @@ const Summary: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
 
   return (
     <React.Fragment>
-      <h2 className="display-4 mb-4">Summary</h2>
+      <span className="section-header mb-3">Summary</span>
 
-      <p className="text-center" style={{ fontSize: "x-large" }}>
+      <p className="text-center" style={{fontSize: "large"}}>
         In the last year you've listened to <br />
-        <span className="display-2">{summary.totalPlayCount} tracks</span>  <br />
-        for a total of <br /><span className="display-2">{summary.totalListeningTimeMinutes} minutes</span>  <br />
-        or <span className="display-3"> {summary.totalListeningTimeSummary}</span>.
-        </p>
-      <Row style={{ fontSize: "x-large", marginBottom: 100, textAlign: "center" }}>
-        <Col sm={6}>
-          There are <span className="display-3">{summary.differentArtists}</span> different artists
-          and <span className="display-3">{summary.differentTracks}</span> different tracks in your streaming history.
-          </Col>
-        <Col sm={6}>
-          Your top 10% artists and tracks are responsible respectively for <span className="display-3">{Math.round(summary.top10artistsShare * 1000) / 10}% </span>
-          and <span className="display-3">{Math.round(summary.top10tracksShare * 1000) / 10}% </span> of all your streams.
-          </Col>
-      </Row>
+        <span className="display-4">{summary.totalPlayCount} tracks</span>  <br />
+        for a total of <br /><span className="display-4">{summary.totalListeningTimeMinutes} minutes</span>  <br />
+        or <span className="display-4"> {summary.totalListeningTimeSummary}</span>.
+      </p>
     </React.Fragment >
   );
 }

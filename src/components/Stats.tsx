@@ -5,6 +5,8 @@ import { Table } from './Table';
 import { Chart } from './Chart';
 import Summary from './Summary';
 import "./Stats.css";
+import OtherUnits from './OtherUnits';
+import Attachment from './Attachment';
 
 export interface StatsProps {
 }
@@ -31,7 +33,7 @@ export class Stats extends Component<StatsProps, StatsState> {
         let fileReader = new FileReader();
         fileReader.onloadend = (e) => {
           let ls: ListeningEntry[] = JSON.parse(fileReader.result as string);
-          ls = ls.filter((x: ListeningEntry) => x.msPlayed > 60000 && x.msPlayed < 600000);
+          //ls = ls.filter((x: ListeningEntry) => x.msPlayed > 60000 && x.msPlayed < 600000);
           ls.forEach(x => x.date = new Date(x.endTime.replace(" ", "T") + ":00.000Z"));
           result = [...result, ...ls];
           loadedFiles = loadedFiles + 1;
@@ -62,6 +64,12 @@ export class Stats extends Component<StatsProps, StatsState> {
         <React.Fragment>
           <section id="summary">
             <Summary listeningHistory={this.state.listeningHistory} />
+          </section>
+          <section id="otherUnits">
+            <OtherUnits listeningHistory={this.state.listeningHistory} />
+          </section>
+          <section id="attachment">
+            <Attachment listeningHistory={this.state.listeningHistory} />
           </section>
           <section id="chart">
             <Chart listeningHistory={this.state.listeningHistory} />

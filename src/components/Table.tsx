@@ -83,23 +83,23 @@ export class Table extends Component<TabProps, TabState> {
     const columns = [{
       header: "#",
       selector: (x: StatRow) => x.id,
-      style: { width: 60 }
+      style: { flex: 1 }
     }, {
       header: "Track",
       selector: (x: StatRow) => x.trackName,
-      style: { flex: 1, display: this.state.tableFuncId === 0 ? "table-cell " : "none" },
+      style: { flex: 10, display: this.state.tableFuncId === 0 ? "table-cell " : "none" },
     }, {
       header: "Artist",
       selector: (x: StatRow) => x.artistName,
-      style: { flex: 1 }
+      style: { flex: 10 }
     }, {
-      header: "Play Count",
+      header: "Streams",
       selector: (x: StatRow) => x.playedTimes,
-      style: { width: 150 }
+      style: { flex: 2 }
     }, {
-      header: "Listening Time",
+      header: "Minutes",
       selector: (x: StatRow) => x.totalListeningTime,
-      style: { width: 150 }
+      style: { flex: 2 }
     }];
 
     const Row = ({ index, style }: any) => (
@@ -136,35 +136,41 @@ export class Table extends Component<TabProps, TabState> {
 
     return (
       <React.Fragment>
-        <h2 className="display-4 mb-4">Your favourites</h2>
+        <div className="d-flex align-items-center mb-2">
+          <div style={{flex: 1}}>
+            <span className="section-header">Your favourites</span>
+          </div>
+          <div style={{flex: 1}}>
+            <input type="text" className="form-control" placeholder="Search" style={{ borderRadius: 50 }}
+              onChange={e => this.setState({ ...this.state, searchPhrase: e.target.value })}
+            />
+            <span>Items in total: {data.length}</span>
+          </div>
+        </div>
 
         <ButtonGroup className="d-flex mb-3" size="lg">
           <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.typeChanged(0)}>Favourite tracks</Button>
           <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.typeChanged(1)}>Favourite artists</Button>
         </ButtonGroup>
 
-        <input type="text" className="form-control mb-3" placeholder="Search" style={{ borderRadius: 50 }}
-          onChange={e => this.setState({ ...this.state, searchPhrase: e.target.value })}
-        />
-
         <div className="data-header">
           {columns.map((x, i) => (
-            <div key={i} className={this.state.orderByColumn === i ? "order-by" : ""} style={x.style} onClick={() => this.orderByChanged(i)}>{x.header}</div>
+            <div key={i} className={"data-cell" + (this.state.orderByColumn === i ? " order-by" : "")} style={x.style} onClick={() => this.orderByChanged(i)}>{x.header}</div>
           ))}
         </div>
 
         <div className="data-items mb-2">
           <FixedSizeList
-            height={490}
+            height={480}
             itemCount={data.length}
-            itemSize={49}
+            itemSize={40}
             width="100%"
             outerElementType={CustomScrollbarsVirtualList}
           >
             {Row}
           </FixedSizeList>
         </div>
-        <p>Items in total: {data.length}</p>
+
 
       </React.Fragment>
     );

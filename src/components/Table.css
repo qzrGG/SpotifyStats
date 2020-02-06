@@ -1,6 +1,6 @@
 .data-cell {
   border-bottom: 1px solid #dee2e6;
-  padding: 0.75rem;
+  padding: 0.5rem;
   overflow: hidden;
   white-space: nowrap;
 }
