@@ -142,7 +142,7 @@ export class Table extends Component<TabProps, TabState> {
           </div>
           <div style={{flex: 1}}>
             <input type="text" className="form-control" placeholder="Search" style={{ borderRadius: 50 }}
-              onChange={e => this.setState({ ...this.state, searchPhrase: e.target.value })}
+              onChange={e => this.setState({ ...this.state, searchPhrase: e.target.value.toLowerCase() })}
             />
             <span>Items in total: {data.length}</span>
           </div>
