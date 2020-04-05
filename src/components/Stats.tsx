@@ -71,14 +71,14 @@ export class Stats extends Component<StatsProps, StatsState> {
             <section id="otherUnits">
               <OtherUnits listeningHistory={this.state.listeningHistory} />
             </section>
-            <section id="attachment">
-              <Attachment listeningHistory={this.state.listeningHistory} />
-            </section>
             <section id="chart">
               <Chart listeningHistory={this.state.listeningHistory} />
             </section>
             <section id="table">
               <Table listeningHistory={this.state.listeningHistory} />
+            </section>
+            <section id="attachment">
+              <Attachment listeningHistory={this.state.listeningHistory} />
             </section>
           </React.Fragment>
         );
