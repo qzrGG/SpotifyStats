@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/SpotifyStats/static/css/main.1a10c5f2.chunk.css",
-    "main.js": "/SpotifyStats/static/js/main.a81033ab.chunk.js",
-    "main.js.map": "/SpotifyStats/static/js/main.a81033ab.chunk.js.map",
-    "runtime-main.js": "/SpotifyStats/static/js/runtime-main.d07385dc.js",
-    "runtime-main.js.map": "/SpotifyStats/static/js/runtime-main.d07385dc.js.map",
-    "static/css/2.64a99b10.chunk.css": "/SpotifyStats/static/css/2.64a99b10.chunk.css",
-    "static/js/2.7f96bbe2.chunk.js": "/SpotifyStats/static/js/2.7f96bbe2.chunk.js",
-    "static/js/2.7f96bbe2.chunk.js.map": "/SpotifyStats/static/js/2.7f96bbe2.chunk.js.map",
+    "main.css": "/SpotifyStats/static/css/main.b8bc2291.chunk.css",
+    "main.js": "/SpotifyStats/static/js/main.b1cefda0.chunk.js",
+    "main.js.map": "/SpotifyStats/static/js/main.b1cefda0.chunk.js.map",
+    "runtime-main.js": "/SpotifyStats/static/js/runtime-main.0a62ba73.js",
+    "runtime-main.js.map": "/SpotifyStats/static/js/runtime-main.0a62ba73.js.map",
+    "static/css/2.89f067aa.chunk.css": "/SpotifyStats/static/css/2.89f067aa.chunk.css",
+    "static/js/2.57d4d780.chunk.js": "/SpotifyStats/static/js/2.57d4d780.chunk.js",
+    "static/js/2.57d4d780.chunk.js.map": "/SpotifyStats/static/js/2.57d4d780.chunk.js.map",
     "index.html": "/SpotifyStats/index.html",
-    "precache-manifest.feb7f8769a90420b4d80178ea86f0ac5.js": "/SpotifyStats/precache-manifest.feb7f8769a90420b4d80178ea86f0ac5.js",
+    "precache-manifest.864e53cbf5fd2044f3bdea1ab9146068.js": "/SpotifyStats/precache-manifest.864e53cbf5fd2044f3bdea1ab9146068.js",
     "service-worker.js": "/SpotifyStats/service-worker.js",
-    "static/css/2.64a99b10.chunk.css.map": "/SpotifyStats/static/css/2.64a99b10.chunk.css.map",
-    "static/css/main.1a10c5f2.chunk.css.map": "/SpotifyStats/static/css/main.1a10c5f2.chunk.css.map",
-    "static/js/2.7f96bbe2.chunk.js.LICENSE": "/SpotifyStats/static/js/2.7f96bbe2.chunk.js.LICENSE"
+    "static/css/2.89f067aa.chunk.css.map": "/SpotifyStats/static/css/2.89f067aa.chunk.css.map",
+    "static/css/main.b8bc2291.chunk.css.map": "/SpotifyStats/static/css/main.b8bc2291.chunk.css.map",
+    "static/js/2.57d4d780.chunk.js.LICENSE.txt": "/SpotifyStats/static/js/2.57d4d780.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.d07385dc.js",
-    "static/css/2.64a99b10.chunk.css",
-    "static/js/2.7f96bbe2.chunk.js",
-    "static/css/main.1a10c5f2.chunk.css",
-    "static/js/main.a81033ab.chunk.js"
+    "static/js/runtime-main.0a62ba73.js",
+    "static/css/2.89f067aa.chunk.css",
+    "static/js/2.57d4d780.chunk.js",
+    "static/css/main.b8bc2291.chunk.css",
+    "static/js/main.b1cefda0.chunk.js"
   ]
 }
