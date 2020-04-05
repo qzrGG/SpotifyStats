@@ -7,7 +7,6 @@ import Comparer from "../models/Comparer";
 const Attachment: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
   const data = from(props.listeningHistory);
 
-  const totalListeningTime = Math.round(data.sum(x => x.msPlayed) / 60000);
   const totalPlayCount = data.count();
 
   const differentTracks = data.select(x => x.artistName + x.trackName).distinct().count();
