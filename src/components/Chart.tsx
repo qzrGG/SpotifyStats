@@ -3,12 +3,14 @@ import React from "react";
 import { ButtonGroup, Button } from "reactstrap";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip, ResponsiveContainer } from "recharts";
 import { ListeningEntry } from "../models/listeningEntry";
-import { from } from "linq-to-typescript";
+import { from, range } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
 
 export interface ChartProps {
   listeningHistory: ListeningEntry[];
   description: string;
+  since: Date;
+  to: Date;
 }
 
 interface ChartState {
@@ -19,20 +21,43 @@ export class Chart extends Component<ChartProps, ChartState> {
   chartFuncs: ((x: Date) => number)[] = [
     x => x.getHours(),
     x => x.getDay() === 0 ? 7 : x.getDay(),
-    x => x.getFullYear() * 100 + x.getMonth() + 1
+    x => this.monthValue(x)
   ];
 
   daysOfWeek: string[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   xAxisFuncs: ((x: { name: number }) => string)[] = [
-    x => x.name + "",
+    x => x.name.toString().padStart(2, '0'),
     x => this.daysOfWeek[x.name],
-    x => x.name % 100 + "-" + Math.floor(x.name / 100)
+    x => `${(x.name % 100).toString().padStart(2, '0')}.${Math.floor(x.name / 100)-2000}`
   ];
 
   constructor(props: Readonly<ChartProps>) {
     super(props);
     this.state = { chartFuncId: 0 };
   }
+
+  monthValue = (date: Date): number => date.getFullYear() * 100 + date.getMonth() + 1;
+
+  monthDiff = (d1: Date, d2: Date) => {
+    let months = 0;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
+}
+
+  nthMonth = (n: number): number => {
+    const firstDate = new Date(this.props.since);
+    const nthDate = new Date(firstDate.setMonth(firstDate.getMonth() + n));
+    console.log(firstDate)
+    return this.monthValue(nthDate);
+  }
+
+  emptyData: {name: number, totalTime: number, totalPlaybacks: number, mostPlayedTrack: string, mostPlayedArtist: string}[][] = [
+    range(0, 24).select(x => ({name: x, totalTime: 0, totalPlaybacks: 0, mostPlayedTrack: "", mostPlayedArtist: ""})).toArray(),
+    range(1, 7).select(x => ({name: x, totalTime: 0, totalPlaybacks: 0, mostPlayedTrack: "", mostPlayedArtist: ""})).toArray(),
+    range(0, this.monthDiff(this.props.since, this.props.to)).select(x => ({name: this.nthMonth(x), totalTime: 0, totalPlaybacks: 0, mostPlayedTrack: "", mostPlayedArtist: ""})).toArray()
+  ];
 
 
   chartData = () => from(this.props.listeningHistory)
@@ -44,6 +69,9 @@ export class Chart extends Component<ChartProps, ChartState> {
       mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count(), Comparer).first().key,
       mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count(), Comparer).first().key
     }))
+    .union(this.emptyData[this.state.chartFuncId])
+    .groupBy(x => x.name)
+    .select(x => x.first())
     .toArray();
 
   render() {
@@ -59,7 +87,7 @@ export class Chart extends Component<ChartProps, ChartState> {
           <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 1 })}>Days of week</Button>
           <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 2 })}>Months</Button>
         </ButtonGroup>
-        <ResponsiveContainer width="100%" height="60%">
+        <ResponsiveContainer width="100%" height="70%">
           <LineChart
             data={this.chartData()}
           >
@@ -75,7 +103,7 @@ export class Chart extends Component<ChartProps, ChartState> {
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload) {
+  if (active && payload && payload[0].payload.totalTime > 0) {
     return (
       <div className="custom-tooltip">
         <p className="label">{`Total listening time: ${payload[0].payload.totalTime} minutes`}</p>

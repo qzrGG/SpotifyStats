@@ -28,3 +28,7 @@
 .data-items {
   border-bottom: 2px solid #dee2e6;
 }
+
+.stats-row:hover {
+  cursor: pointer;
+}

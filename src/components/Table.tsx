@@ -129,7 +129,7 @@ export class Table extends Component<TabProps, TabState> {
     }];
 
     const Row = ({ index, style }: any) => (
-      <div className="d-flex" style={style} onClick={_ => this.onRowSelected(data[index])}>
+      <div className="d-flex stats-row" style={style} onClick={_ => this.onRowSelected(data[index])}>
         {columns.map((x) => (
           <div key={x.header} style={x.style} className="data-cell">{x.selector(data[index])}</div>
         ))}
