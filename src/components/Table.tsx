@@ -7,9 +7,11 @@ import { FixedSizeList } from 'react-window'
 import { Scrollbars } from "react-custom-scrollbars";
 import "./Table.css";
 import Comparer from "../models/Comparer";
+import { round } from "../common/math.helper";
 
 interface TabProps {
   listeningHistory: ListeningEntry[];
+  onSubsetChanged: (subset: ListeningEntry[], description: string) => void;
 }
 
 interface StatRow {
@@ -18,26 +20,40 @@ interface StatRow {
   playedTimes: number;
   totalListeningTime: number;
   id: number;
+  entries: ListeningEntry[];
 }
 
 interface TabState {
-  tableFuncId: number;
+  tableType: TableType;
   searchPhrase: string;
   orderByColumn: number;
   descendingOrder: boolean;
 }
 
-export class Table extends Component<TabProps, TabState> {
-  tableFuncs: ((x: ListeningEntry) => string)[] = [x => x.trackName + x.artistName, x => x.artistName]
+enum TableType {
+  trackAndArtist = 0,
+  artistOnly = 1
+}
 
+export class Table extends Component<TabProps, TabState> {
+  
   constructor(props: Readonly<TabProps>) {
     super(props);
-    this.state = { tableFuncId: 0, searchPhrase: "", orderByColumn: 0, descendingOrder: false };
+    this.state = { tableType: TableType.trackAndArtist, searchPhrase: "", orderByColumn: 0, descendingOrder: false };
+  }
+
+  groupByProperty = (type: TableType): ((x: ListeningEntry) => string) => {
+    switch (type) {
+      case TableType.trackAndArtist:
+        return x => `${x.trackName}|${x.artistName}`;
+      case TableType.artistOnly:
+        return x => x.artistName;
+    }
   }
 
   tableData = (): StatRow[] => {
     let result = from(this.props.listeningHistory)
-      .groupBy(this.tableFuncs[this.state.tableFuncId])
+      .groupBy(this.groupByProperty(this.state.tableType))
       .select(x => ({ x, count: x.count(), sum: x.sum(t => t.msPlayed) }))
       .orderByDescending(x => x.count, Comparer)
       .thenByDescending(x => x.sum)
@@ -47,11 +63,12 @@ export class Table extends Component<TabProps, TabState> {
           trackName: x.first().trackName,
           artistName: x.first().artistName,
           playedTimes: count,
-          totalListeningTime: Math.round(sum / 60000)
+          totalListeningTime: Math.round(sum / 60000),
+          entries: x.toArray()
         }
       })
       .where(x => x.artistName.toLowerCase().indexOf(this.state.searchPhrase) > -1
-        || (this.state.tableFuncId === 0 && x.trackName.toLowerCase().indexOf(this.state.searchPhrase) > -1)
+        || (this.state.tableType === TableType.trackAndArtist && x.trackName.toLowerCase().indexOf(this.state.searchPhrase) > -1)
       );
 
     switch (this.state.orderByColumn) {
@@ -75,8 +92,13 @@ export class Table extends Component<TabProps, TabState> {
       this.setState({ ...this.state, descendingOrder: false, orderByColumn: column });
   }
 
-  typeChanged = (type: number) => this.setState({ ...this.state, tableFuncId: type, orderByColumn: 0, descendingOrder: false });
+  typeChanged = (type: TableType) => this.setState({ ...this.state, tableType: type, orderByColumn: 0, descendingOrder: false });
 
+  onRowSelected = (row: StatRow) => {
+    const description = this.state.tableType == TableType.artistOnly ? row.artistName : `${row.trackName} by ${row.artistName}`;
+    this.props.onSubsetChanged(row.entries, description);
+  }
+  
   render() {
     const data = this.tableData();
 
@@ -87,7 +109,7 @@ export class Table extends Component<TabProps, TabState> {
     }, {
       header: "Track",
       selector: (x: StatRow) => x.trackName,
-      style: { flex: 10, display: this.state.tableFuncId === 0 ? "table-cell " : "none" },
+      style: { flex: 10, display: this.state.tableType === TableType.trackAndArtist ? "table-cell " : "none" },
     }, {
       header: "Artist",
       selector: (x: StatRow) => x.artistName,
@@ -100,10 +122,14 @@ export class Table extends Component<TabProps, TabState> {
       header: "Minutes",
       selector: (x: StatRow) => x.totalListeningTime,
       style: { flex: 2 }
+    }, {
+      header: "Earnings ($)",
+      selector: (x: StatRow) => round(x.playedTimes * 0.004, 2),
+      style: { flex: 2, display: this.state.tableType === TableType.artistOnly ? "table-cell " : "none" }
     }];
 
     const Row = ({ index, style }: any) => (
-      <div className="d-flex" style={style}>
+      <div className="d-flex" style={style} onClick={_ => this.onRowSelected(data[index])}>
         {columns.map((x) => (
           <div key={x.header} style={x.style} className="data-cell">{x.selector(data[index])}</div>
         ))}
@@ -149,8 +175,8 @@ export class Table extends Component<TabProps, TabState> {
         </div>
 
         <ButtonGroup className="d-flex mb-3" size="lg">
-          <Button active={this.state.tableFuncId === 0} color="primary" onClick={() => this.typeChanged(0)}>Favourite tracks</Button>
-          <Button active={this.state.tableFuncId === 1} color="primary" onClick={() => this.typeChanged(1)}>Favourite artists</Button>
+          <Button active={this.state.tableType === TableType.trackAndArtist} color="primary" onClick={() => this.typeChanged(TableType.trackAndArtist)}>Favourite tracks</Button>
+          <Button active={this.state.tableType === TableType.artistOnly} color="primary" onClick={() => this.typeChanged(TableType.artistOnly)}>Favourite artists</Button>
         </ButtonGroup>
 
         <div className="data-header">

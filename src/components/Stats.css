@@ -8,9 +8,6 @@ html, body {
   height: 100%;
   overflow-y: scroll; 
   scroll-behavior: smooth;
-  scroll-snap-points-y: repeat(100vh);
-  scroll-snap-stop: always;
-  scroll-snap-type: y mandatory;
 }
 
 section {
@@ -19,9 +16,4 @@ section {
   justify-content: center;
   width: 100%;
   height: 100vh;
-  scroll-snap-align: center;
-}
-
-header {
-  scroll-snap-align: center;
 }

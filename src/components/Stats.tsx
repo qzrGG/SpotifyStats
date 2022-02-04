@@ -13,6 +13,8 @@ export interface StatsProps {
 
 export interface StatsState {
   listeningHistory: ListeningEntry[];
+  listeningHistorySubset: ListeningEntry[];
+  subsetDescription: string;
   progress: number;
 }
 
@@ -21,7 +23,7 @@ export class Stats extends Component<StatsProps, StatsState> {
 
   constructor(props: Readonly<StatsProps>) {
     super(props);
-    this.state = { listeningHistory: [], progress: 0 };
+    this.state = { listeningHistory: [], listeningHistorySubset: [], progress: 0, subsetDescription: "" };
   }
 
   loadFiles = (files: File[]) => {
@@ -72,10 +74,13 @@ export class Stats extends Component<StatsProps, StatsState> {
               <OtherUnits listeningHistory={this.state.listeningHistory} />
             </section>
             <section id="chart">
-              <Chart listeningHistory={this.state.listeningHistory} />
+              <Chart listeningHistory={this.state.listeningHistory} description="Music over time" />
             </section>
             <section id="table">
-              <Table listeningHistory={this.state.listeningHistory} />
+              <Table listeningHistory={this.state.listeningHistory} onSubsetChanged={(subset, desctiption) => this.setState({ ...this.state, listeningHistorySubset: subset, subsetDescription: desctiption })}/>
+            </section>
+            <section id="chart">
+              <Chart listeningHistory={this.state.listeningHistorySubset} description={`Details for ${this.state.subsetDescription}`} />
             </section>
             <section id="attachment">
               <Attachment listeningHistory={this.state.listeningHistory} />

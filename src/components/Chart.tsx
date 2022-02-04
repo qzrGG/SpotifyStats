@@ -8,6 +8,7 @@ import Comparer from "../models/Comparer";
 
 export interface ChartProps {
   listeningHistory: ListeningEntry[];
+  description: string;
 }
 
 interface ChartState {
@@ -46,9 +47,12 @@ export class Chart extends Component<ChartProps, ChartState> {
     .toArray();
 
   render() {
+    if (this.props.listeningHistory == null || this.props.listeningHistory.length === 0) {
+      return (<p>Select a track or an artist in the table to see it's details</p>);
+    } 
     return (
       <React.Fragment>
-        <span className="section-header mb-3">Music over time</span>
+        <span className="section-header mb-3">{this.props.description}</span>
         
         <ButtonGroup className="d-flex mb-3" size="lg">
           <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 0 })}>Hours</Button>

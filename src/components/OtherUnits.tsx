@@ -1,13 +1,12 @@
 import React from "react";
 import { ListeningEntry } from "../models/listeningEntry";
 import { from } from "linq-to-typescript";
+import { round } from "../common/math.helper";
 
 const OtherUnits: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
   const data = from(props.listeningHistory);
 
   const totalListeningTime = data.sum(x => x.msPlayed) / 60000;
-
-  let round = (x: number, precision: number) => (Math.round(x * Math.pow(10, precision)) / Math.pow(10, precision)).toLocaleString();
 
   return (
     <div style={{fontSize: "x-large", fontWeight: 300}}>
