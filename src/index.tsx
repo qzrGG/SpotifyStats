@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './custom.scss';
+import './dark.scss';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

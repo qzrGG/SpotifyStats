@@ -57,14 +57,16 @@ export class Stats extends Component<StatsProps, StatsState> {
   render() {
     return this.state.progress === 0
       ? (
-        <Dropzone onDrop={this.loadFiles}>
-          {({ getRootProps, getInputProps }) => (
-            <div {...getRootProps({ className: 'dropzone' })}>
-              <input {...getInputProps()} />
-              <p>Drag and drop your StreamingHistory#.json files here, or click to select files</p>
-            </div>
-          )}
-        </Dropzone>
+        <section>
+          <Dropzone onDrop={this.loadFiles}>
+            {({ getRootProps, getInputProps }) => (
+              <div {...getRootProps({ className: 'dropzone' })}>
+                <input {...getInputProps()} />
+                <p>Drag and drop your StreamingHistory#.json files here, or click to select files</p>
+              </div>
+            )}
+          </Dropzone>
+        </section>
       ) : this.state.progress === 1 ? (
         <h2 className="text-center display-4">Loading...</h2>
       ) :

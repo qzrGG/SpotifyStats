@@ -95,7 +95,7 @@ export class Table extends Component<TabProps, TabState> {
   typeChanged = (type: TableType) => this.setState({ ...this.state, tableType: type, orderByColumn: 0, descendingOrder: false });
 
   onRowSelected = (row: StatRow) => {
-    const description = this.state.tableType == TableType.artistOnly ? row.artistName : `${row.trackName} by ${row.artistName}`;
+    const description = this.state.tableType === TableType.artistOnly ? row.artistName : `${row.trackName} by ${row.artistName}`;
     this.props.onSubsetChanged(row.entries, description);
   }
   

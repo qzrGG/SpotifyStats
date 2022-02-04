@@ -48,9 +48,9 @@ const Attachment: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => 
       <p className="text-center" style={{ fontSize: "large" }}>
         There are <span className="display-4">{differentArtists}</span> different artists
         and <span className="display-4">{differentTracks}</span> different tracks in your streaming history.
-        How many percents of all streams are your favourites responsible for?
+        How many percents of all streams are your favourites responsible for?<br/>
+        Your music variety score is <span className="display-3">{varietyArtists}</span> for artists and <span className="display-3">{varietyTracks}</span> for tracks (out of 100)
       </p>
-      <p>Your music variety score is <span className="display-3">{varietyArtists}</span> for artists and <span className="display-3">{varietyTracks}</span> for tracks (out of 100)</p>
       <ResponsiveContainer width="100%" height="50%">
         <LineChart
           data={chartData}
