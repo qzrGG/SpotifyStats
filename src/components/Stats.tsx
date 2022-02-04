@@ -35,7 +35,7 @@ export class Stats extends Component<StatsProps, StatsState> {
       Promise.all(filesToLoad.map(this.loadFile)).then(results => {
         let entries = results.map(r => JSON.parse(r as string) as ListeningEntry[]).flat();
         entries.forEach(x => x.date = new Date(x.endTime.replace(" ", "T") + ":00.000Z"));
-        let ordered = from(entries).orderBy(x => x.date.getTime())
+        let ordered = from(entries).orderBy(x => x.date.getTime()).groupBy(x => x.endTime + x.trackName).select(x => x.first());
         entries = ordered.toArray();
 
         this.setState({ ...this.state, listeningHistory: entries, progress: 2, since: ordered.first().date, to: ordered.last().date });

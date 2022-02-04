@@ -49,7 +49,6 @@ export class Chart extends Component<ChartProps, ChartState> {
   nthMonth = (n: number): number => {
     const firstDate = new Date(this.props.since);
     const nthDate = new Date(firstDate.setMonth(firstDate.getMonth() + n));
-    console.log(firstDate)
     return this.monthValue(nthDate);
   }
 
