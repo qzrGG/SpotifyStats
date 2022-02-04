@@ -117,7 +117,7 @@ export class Table extends Component<TabProps, TabState> {
         } else {
           forwardedRef(null);
         }
-      }, []);
+      }, [forwardedRef]);
 
       return (
         <Scrollbars
