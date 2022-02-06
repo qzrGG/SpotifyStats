@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
-import { Table } from './Table';
+import Table from './Table';
 import { Chart } from './Chart';
 import Summary from './Summary';
 import "./Stats.css";
@@ -86,8 +86,6 @@ export class Stats extends Component<StatsProps, StatsState> {
             </section>
             <section id="table">
               <Table listeningHistory={this.state.listeningHistory} since={this.state.since} to={this.state.to} />
-            </section>
-            <section id="subchart">
             </section>
             <section id="attachment">
               <Attachment listeningHistory={this.state.listeningHistory} />

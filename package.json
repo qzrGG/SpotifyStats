@@ -10,8 +10,8 @@
     "@kartikag01/react-custom-scrollbars": "^4.2.1",
     "bootstrap": "^4.4.1",
     "fs": "^0.0.1-security",
-    "linq-to-typescript": "^6.0.1",
-    "node-sass": "^7.0.1",
+    "linq-to-typescript": "^9.0.0",
+    "node-sass": "^6.0.1",
     "overlayscrollbars": "^1.13.1",
     "overlayscrollbars-react": "^0.2.3",
     "react": "^16.12.0",
@@ -20,12 +20,12 @@
     "react-dropzone": "^10.2.1",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^5.0.0",
+    "react-scripts": "^4.0.3",
     "react-switch": "^6.0.0",
     "react-window": "^1.8.6",
     "reactstrap": "^8.4.0",
-    "recharts": "^2.0.0-beta.1",
-    "typescript": "~3.7.2"
+    "recharts": "^2.1.8",
+    "typescript": "~4.4.2"
   },
   "scripts": {
     "start": "react-scripts start",

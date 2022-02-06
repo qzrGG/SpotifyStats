@@ -66,7 +66,7 @@ export class Chart extends Component<ChartProps, ChartState> {
       name: g.key,
       totalTime: round(g.sum(x => x.msPlayed) / 60000, 2),
       totalPlaybacks: g.count(),
-      mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count(), Comparer).first().key,
+      mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count(), Comparer).first().take(1).select(x => `${x.trackName} by ${x.artistName}`).first(),
       mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count(), Comparer).first().key
     }))
     .union(this.emptyData[this.state.chartFuncId])

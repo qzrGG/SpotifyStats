@@ -13,29 +13,24 @@ interface RankingProps {
 
 export class Ranking extends Component<RankingProps> {
   listRef = React.createRef<FixedSizeList>();
-  pos = 0;
-
-  constructor(props: Readonly<RankingProps>) {
-    super(props);
-  }
 
   shouldComponentUpdate(nextProps: RankingProps) {
-      if (nextProps.data.length === this.props.data.length)
-          return false;
+    if (nextProps.data === this.props.data)
+      return false;
 
-      return true;
+    return true;
   }
 
   componentDidUpdate(prevProps: RankingProps) {
-      if (prevProps.data.length !== this.props.data.length) {
-          this.listRef.current?.scrollTo(0);
-      }
+    if (prevProps.data.length !== this.props.data.length) {
+      this.listRef.current?.scrollTo(0);
+    }
   }
 
   onRowSelected = (row: StatRow) => {
     this.props.onSubsetChanged(row);
   }
-  
+
   render() {
     const Row = ({ index, style }: any) => (
       <div className="d-flex stats-row" style={style} onClick={_ => this.onRowSelected(this.props.data[index])}>
@@ -70,18 +65,18 @@ export class Ranking extends Component<RankingProps> {
     ));
 
     return (
-        <div className="data-items mb-2">
-          <FixedSizeList
-            height={400}
-            itemCount={this.props.data.length}
-            itemSize={40}
-            width="100%"
-            outerElementType={CustomScrollbarsVirtualList}
-            ref={this.listRef}
-          >
-            {Row}
-          </FixedSizeList>
-        </div>
+      <div className="data-items mb-2">
+        <FixedSizeList
+          height={400}
+          itemCount={this.props.data.length}
+          itemSize={40}
+          width="100%"
+          outerElementType={CustomScrollbarsVirtualList}
+          ref={this.listRef}
+        >
+          {Row}
+        </FixedSizeList>
+      </div>
     );
   }
 }
