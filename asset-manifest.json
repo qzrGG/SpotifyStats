@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/SpotifyStats/static/css/main.4993ac0d.chunk.css",
-    "main.js": "/SpotifyStats/static/js/main.48a0b334.chunk.js",
-    "main.js.map": "/SpotifyStats/static/js/main.48a0b334.chunk.js.map",
+    "main.js": "/SpotifyStats/static/js/main.5e68f395.chunk.js",
+    "main.js.map": "/SpotifyStats/static/js/main.5e68f395.chunk.js.map",
     "runtime-main.js": "/SpotifyStats/static/js/runtime-main.fe3f5e6a.js",
     "runtime-main.js.map": "/SpotifyStats/static/js/runtime-main.fe3f5e6a.js.map",
     "static/css/2.858c4db3.chunk.css": "/SpotifyStats/static/css/2.858c4db3.chunk.css",
-    "static/js/2.51fa9661.chunk.js": "/SpotifyStats/static/js/2.51fa9661.chunk.js",
-    "static/js/2.51fa9661.chunk.js.map": "/SpotifyStats/static/js/2.51fa9661.chunk.js.map",
+    "static/js/2.fe97839d.chunk.js": "/SpotifyStats/static/js/2.fe97839d.chunk.js",
+    "static/js/2.fe97839d.chunk.js.map": "/SpotifyStats/static/js/2.fe97839d.chunk.js.map",
     "index.html": "/SpotifyStats/index.html",
     "static/css/2.858c4db3.chunk.css.map": "/SpotifyStats/static/css/2.858c4db3.chunk.css.map",
     "static/css/main.4993ac0d.chunk.css.map": "/SpotifyStats/static/css/main.4993ac0d.chunk.css.map",
-    "static/js/2.51fa9661.chunk.js.LICENSE.txt": "/SpotifyStats/static/js/2.51fa9661.chunk.js.LICENSE.txt"
+    "static/js/2.fe97839d.chunk.js.LICENSE.txt": "/SpotifyStats/static/js/2.fe97839d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.fe3f5e6a.js",
     "static/css/2.858c4db3.chunk.css",
-    "static/js/2.51fa9661.chunk.js",
+    "static/js/2.fe97839d.chunk.js",
     "static/css/main.4993ac0d.chunk.css",
-    "static/js/main.48a0b334.chunk.js"
+    "static/js/main.5e68f395.chunk.js"
   ]
 }
