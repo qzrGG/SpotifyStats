@@ -1,14 +1,13 @@
 import { from } from "linq-to-typescript";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ButtonGroup, Button } from "reactstrap";
 import "./Table.css";
 import Comparer from "../models/Comparer";
 import { minutes, round } from "../common/math.helper";
 import { StatRow } from "../models/StatRow";
-import { Ranking } from "./Ranking";
+import Ranking from "./Ranking";
 import { ListeningEntry } from "../models/listeningEntry";
 import { Chart } from "./Chart";
-import { useState, useEffect } from "react";
 
 interface TabProps {
   listeningHistory: ListeningEntry[];
@@ -31,6 +30,7 @@ enum TableType {
   trackAndArtist = 0,
   artistOnly = 1
 }
+
 const Table: React.FC<TabProps> = (props) => {
   const [state, setState] = useState<TabState>({
     tableType: TableType.trackAndArtist,
@@ -129,8 +129,6 @@ const Table: React.FC<TabProps> = (props) => {
     selector: (x: StatRow) => round(x.playedTimes * 0.004, 2),
     style: { flex: 2, display: state.tableType === TableType.artistOnly ? "table-cell " : "none" }
   }];
-
-
 
   return (
     <React.Fragment>

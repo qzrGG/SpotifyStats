@@ -1,4 +1,4 @@
-import { Component, useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import React from "react";
 import { FixedSizeList } from "react-window";
 import "./Table.css";
@@ -11,72 +11,67 @@ interface RankingProps {
   columns: StatColumn[];
 }
 
-export class Ranking extends Component<RankingProps> {
-  listRef = React.createRef<FixedSizeList>();
+const Ranking: React.FC<RankingProps> = (props) => {
+  const listRef = React.createRef<FixedSizeList>();
 
-  shouldComponentUpdate(nextProps: RankingProps) {
-    if (nextProps.data === this.props.data)
-      return false;
+  useEffect(() => {
+    listRef.current?.scrollTo(0);
+  }, [props.data, listRef]);
 
-    return true;
+  const onRowSelected = (row: StatRow) => {
+    props.onSubsetChanged(row);
   }
 
-  componentDidUpdate(prevProps: RankingProps) {
-    if (prevProps.data.length !== this.props.data.length) {
-      this.listRef.current?.scrollTo(0);
-    }
-  }
+  const Row = ({ index, style }: any) => (
+    <div className="d-flex stats-row" style={style} onClick={_ => onRowSelected(props.data[index])}>
+      {props.columns.map((x) => (
+        <div key={x.header} style={x.style} className="data-cell">{x.selector(props.data[index])}</div>
+      ))}
+    </div>
+  );
 
-  onRowSelected = (row: StatRow) => {
-    this.props.onSubsetChanged(row);
-  }
-
-  render() {
-    const Row = ({ index, style }: any) => (
-      <div className="d-flex stats-row" style={style} onClick={_ => this.onRowSelected(this.props.data[index])}>
-        {this.props.columns.map((x) => (
-          <div key={x.header} style={x.style} className="data-cell">{x.selector(this.props.data[index])}</div>
-        ))}
-      </div>
-    );
-
-    const CustomScrollbars = ({ onScroll, forwardedRef, style, children }: any) => {
-      const refSetter = useCallback(scrollbarsRef => {
-        if (scrollbarsRef) {
-          forwardedRef(scrollbarsRef.view);
-        } else {
-          forwardedRef(null);
-        }
-      }, [forwardedRef]);
-
-      return (
-        <Scrollbars
-          ref={refSetter}
-          style={{ ...style, overflow: "hidden" }}
-          onScroll={onScroll}
-        >
-          {children}
-        </Scrollbars>
-      );
-    };
-
-    const CustomScrollbarsVirtualList = React.forwardRef((props, ref) => (
-      <CustomScrollbars {...props} forwardedRef={ref} />
-    ));
+  const CustomScrollbars = ({ onScroll, forwardedRef, style, children }: any) => {
+    const refSetter = useCallback(scrollbarsRef => {
+      if (scrollbarsRef) {
+        forwardedRef(scrollbarsRef.view);
+      } else {
+        forwardedRef(null);
+      }
+    }, [forwardedRef]);
 
     return (
-      <div className="data-items mb-2">
-        <FixedSizeList
-          height={400}
-          itemCount={this.props.data.length}
-          itemSize={40}
-          width="100%"
-          outerElementType={CustomScrollbarsVirtualList}
-          ref={this.listRef}
-        >
-          {Row}
-        </FixedSizeList>
-      </div>
+      <Scrollbars
+        ref={refSetter}
+        style={{ ...style, overflow: "hidden" }}
+        onScroll={onScroll}
+      >
+        {children}
+      </Scrollbars>
     );
-  }
+  };
+
+  const CustomScrollbarsVirtualList = React.forwardRef((props, ref) => (
+    <CustomScrollbars {...props} forwardedRef={ref} />
+  ));
+
+  return (
+    <div className="data-items mb-2">
+      <FixedSizeList
+        height={400}
+        itemCount={props.data.length}
+        itemSize={40}
+        width="100%"
+        outerElementType={CustomScrollbarsVirtualList}
+        ref={listRef}
+      >
+        {Row}
+      </FixedSizeList>
+    </div>
+  );
 }
+
+const areEqual = (prevProps: RankingProps, nextProps: RankingProps): boolean => {
+  return prevProps.data === nextProps.data;
+ }
+
+export default React.memo(Ranking, areEqual);
