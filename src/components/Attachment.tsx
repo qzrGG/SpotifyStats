@@ -1,5 +1,5 @@
 import React from "react";
-import { ListeningEntry } from "../models/listeningEntry";
+import { ListeningEntry } from "../models/ListeningEntry";
 import { from } from "linq-to-typescript";
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip } from "recharts";
 import Comparer from "../models/Comparer";

@@ -40,7 +40,7 @@ export class NavMenu extends Component<NavMenuProps, NavMenuState> {
   }
 
   toggleDarkMode = (checked: boolean) => {
-    this.setState({...this.state, isDarkModeEnabled: checked}, () => {
+    this.setState({ isDarkModeEnabled: checked}, () => {
       const element = document.body;
       if (checked) {
         element.classList.add("dark-mode");
@@ -61,7 +61,8 @@ export class NavMenu extends Component<NavMenuProps, NavMenuState> {
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem style={{marginTop: 8}}>
-                  <Switch checked={this.state.isDarkModeEnabled} onChange={this.toggleDarkMode} height={26} checkedIcon={<FontAwesomeIcon icon={faMoon} style={{marginLeft: 5}}/>} onColor="#33c17d" uncheckedIcon={<FontAwesomeIcon icon={faSun} style={{marginLeft: 10}}/>}/>
+                  <Switch checked={this.state.isDarkModeEnabled} onChange={this.toggleDarkMode} height={26} 
+                  checkedIcon={<FontAwesomeIcon icon={faMoon} style={{marginLeft: 5}}/>} onColor="#33c17d" uncheckedIcon={<FontAwesomeIcon icon={faSun} style={{marginLeft: 10}}/>}/>
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/">Instructions</NavLink>

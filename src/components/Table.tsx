@@ -1,26 +1,19 @@
-import { Component, useCallback } from "react";
-import { ListeningEntry } from "../models/listeningEntry";
+import { Component } from "react";
 import { from } from "linq-to-typescript";
 import React from "react";
 import { ButtonGroup, Button } from "reactstrap";
-import { FixedSizeList } from 'react-window'
-import { Scrollbars } from "react-custom-scrollbars";
 import "./Table.css";
 import Comparer from "../models/Comparer";
-import { round } from "../common/math.helper";
+import { minutes, round } from "../common/math.helper";
+import { StatRow } from "../models/StatRow";
+import { Ranking } from "./Ranking";
+import { ListeningEntry } from "../models/ListeningEntry";
+import { Chart } from "./Chart";
 
 interface TabProps {
   listeningHistory: ListeningEntry[];
-  onSubsetChanged: (subset: ListeningEntry[], description: string) => void;
-}
-
-interface StatRow {
-  trackName: string;
-  artistName: string;
-  playedTimes: number;
-  totalListeningTime: number;
-  id: number;
-  entries: ListeningEntry[];
+  since: Date;
+  to: Date;
 }
 
 interface TabState {
@@ -28,6 +21,10 @@ interface TabState {
   searchPhrase: string;
   orderByColumn: number;
   descendingOrder: boolean;
+  scrollPosition: number;
+  data: StatRow[];
+  listeningHistorySubset: ListeningEntry[];
+  subsetDescription: string;
 }
 
 enum TableType {
@@ -36,10 +33,18 @@ enum TableType {
 }
 
 export class Table extends Component<TabProps, TabState> {
-  
   constructor(props: Readonly<TabProps>) {
     super(props);
-    this.state = { tableType: TableType.trackAndArtist, searchPhrase: "", orderByColumn: 0, descendingOrder: false };
+    this.state = {
+      tableType: TableType.trackAndArtist,
+      searchPhrase: "",
+      orderByColumn: 0,
+      descendingOrder: false,
+      scrollPosition: 0,
+      data: [],
+      listeningHistorySubset: [],
+      subsetDescription: ""
+    };
   }
 
   groupByProperty = (type: TableType): ((x: ListeningEntry) => string) => {
@@ -63,7 +68,7 @@ export class Table extends Component<TabProps, TabState> {
           trackName: x.first().trackName,
           artistName: x.first().artistName,
           playedTimes: count,
-          totalListeningTime: Math.round(sum / 60000),
+          totalListeningTime: round(sum / 60000, 2),
           entries: x.toArray()
         }
       })
@@ -87,18 +92,22 @@ export class Table extends Component<TabProps, TabState> {
 
   orderByChanged = (column: number) => {
     if (this.state.orderByColumn === column)
-      this.setState({ ...this.state, descendingOrder: !this.state.descendingOrder });
+      this.setState({ descendingOrder: !this.state.descendingOrder });
     else
-      this.setState({ ...this.state, descendingOrder: false, orderByColumn: column });
+      this.setState({ descendingOrder: false, orderByColumn: column });
   }
 
-  typeChanged = (type: TableType) => this.setState({ ...this.state, tableType: type, orderByColumn: 0, descendingOrder: false });
+  typeChanged = (type: TableType) => this.setState({ tableType: type, orderByColumn: 0, descendingOrder: false });
 
   onRowSelected = (row: StatRow) => {
     const description = this.state.tableType === TableType.artistOnly ? row.artistName : `${row.trackName} by ${row.artistName}`;
-    this.props.onSubsetChanged(row.entries, description);
+    this.setState({ listeningHistorySubset: row.entries, subsetDescription: description });
   }
-  
+
+  onSearchedTextChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ searchPhrase: e.target.value.toLowerCase() });
+  }
+
   render() {
     const data = this.tableData();
 
@@ -120,7 +129,7 @@ export class Table extends Component<TabProps, TabState> {
       style: { flex: 2 }
     }, {
       header: "Minutes",
-      selector: (x: StatRow) => x.totalListeningTime,
+      selector: (x: StatRow) => minutes(x.totalListeningTime),
       style: { flex: 2 }
     }, {
       header: "Earnings ($)",
@@ -128,53 +137,21 @@ export class Table extends Component<TabProps, TabState> {
       style: { flex: 2, display: this.state.tableType === TableType.artistOnly ? "table-cell " : "none" }
     }];
 
-    const Row = ({ index, style }: any) => (
-      <div className="d-flex stats-row" style={style} onClick={_ => this.onRowSelected(data[index])}>
-        {columns.map((x) => (
-          <div key={x.header} style={x.style} className="data-cell">{x.selector(data[index])}</div>
-        ))}
-      </div>
-    );
-
-    const CustomScrollbars = ({ onScroll, forwardedRef, style, children }: any) => {
-      const refSetter = useCallback(scrollbarsRef => {
-        if (scrollbarsRef) {
-          forwardedRef(scrollbarsRef.view);
-        } else {
-          forwardedRef(null);
-        }
-      }, [forwardedRef]);
-
-      return (
-        <Scrollbars
-          ref={refSetter}
-          style={{ ...style, overflow: "hidden" }}
-          onScroll={onScroll}
-        >
-          {children}
-        </Scrollbars>
-      );
-    };
-
-    const CustomScrollbarsVirtualList = React.forwardRef((props, ref) => (
-      <CustomScrollbars {...props} forwardedRef={ref} />
-    ));
-
     return (
       <React.Fragment>
         <div className="d-flex align-items-center mb-2">
-          <div style={{flex: 1}}>
+          <div style={{ flex: 1 }}>
             <span className="section-header">Your favourites</span>
           </div>
-          <div style={{flex: 1}}>
+          <div style={{ flex: 1 }}>
             <input type="text" className="form-control" placeholder="Search" style={{ borderRadius: 50 }}
-              onChange={e => this.setState({ ...this.state, searchPhrase: e.target.value.toLowerCase() })}
+              onChange={this.onSearchedTextChanged}
             />
             <span>Items in total: {data.length}</span>
           </div>
         </div>
 
-        <ButtonGroup className="d-flex mb-3" size="lg">
+        <ButtonGroup className="d-flex mb-3" size="md">
           <Button active={this.state.tableType === TableType.trackAndArtist} color="primary" onClick={() => this.typeChanged(TableType.trackAndArtist)}>Favourite tracks</Button>
           <Button active={this.state.tableType === TableType.artistOnly} color="primary" onClick={() => this.typeChanged(TableType.artistOnly)}>Favourite artists</Button>
         </ButtonGroup>
@@ -185,18 +162,8 @@ export class Table extends Component<TabProps, TabState> {
           ))}
         </div>
 
-        <div className="data-items mb-2">
-          <FixedSizeList
-            height={480}
-            itemCount={data.length}
-            itemSize={40}
-            width="100%"
-            outerElementType={CustomScrollbarsVirtualList}
-          >
-            {Row}
-          </FixedSizeList>
-        </div>
-
+        <Ranking data={data} columns={columns} onSubsetChanged={this.onRowSelected} />
+        <Chart listeningHistory={this.state.listeningHistorySubset} description={`Details for ${this.state.subsetDescription}`} since={this.props.since} to={this.props.to} />
 
       </React.Fragment>
     );

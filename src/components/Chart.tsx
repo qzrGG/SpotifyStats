@@ -2,9 +2,10 @@ import { Component } from "react";
 import React from "react";
 import { ButtonGroup, Button } from "reactstrap";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip, ResponsiveContainer } from "recharts";
-import { ListeningEntry } from "../models/listeningEntry";
+import { ListeningEntry } from "../models/ListeningEntry";
 import { from, range } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
+import { minutes, round } from "../common/math.helper";
 
 export interface ChartProps {
   listeningHistory: ListeningEntry[];
@@ -63,7 +64,7 @@ export class Chart extends Component<ChartProps, ChartState> {
     .groupBy(x => this.chartFuncs[this.state.chartFuncId](x.date))
     .select(g => ({
       name: g.key,
-      totalTime: Math.round(g.sum(x => x.msPlayed) / 60000),
+      totalTime: round(g.sum(x => x.msPlayed) / 60000, 2),
       totalPlaybacks: g.count(),
       mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count(), Comparer).first().key,
       mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count(), Comparer).first().key
@@ -81,10 +82,10 @@ export class Chart extends Component<ChartProps, ChartState> {
       <React.Fragment>
         <span className="section-header mb-3">{this.props.description}</span>
         
-        <ButtonGroup className="d-flex mb-3" size="lg">
-          <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 0 })}>Hours</Button>
-          <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 1 })}>Days of week</Button>
-          <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ ...this.state, chartFuncId: 2 })}>Months</Button>
+        <ButtonGroup className="d-flex mb-3" size="md">
+          <Button active={this.state.chartFuncId === 0} color="primary" onClick={() => this.setState({ chartFuncId: 0 })}>Hours</Button>
+          <Button active={this.state.chartFuncId === 1} color="primary" onClick={() => this.setState({ chartFuncId: 1 })}>Days of week</Button>
+          <Button active={this.state.chartFuncId === 2} color="primary" onClick={() => this.setState({ chartFuncId: 2 })}>Months</Button>
         </ButtonGroup>
         <ResponsiveContainer width="100%" height="70%">
           <LineChart
@@ -105,7 +106,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload[0].payload.totalTime > 0) {
     return (
       <div className="custom-tooltip">
-        <p className="label">{`Total listening time: ${payload[0].payload.totalTime} minutes`}</p>
+        <p className="label">{`Total listening time: ${minutes(payload[0].payload.totalTime)}`}</p>
         <p className="desc">Total tracks played: {payload[0].payload.totalPlaybacks}<br />
           Favourite track: {payload[0].payload.mostPlayedTrack}<br />
           Favourite artist: {payload[0].payload.mostPlayedArtist}<br />

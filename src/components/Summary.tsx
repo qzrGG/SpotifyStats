@@ -1,5 +1,5 @@
 import React from "react";
-import { ListeningEntry } from "../models/listeningEntry";
+import { ListeningEntry } from "../models/ListeningEntry";
 import { from } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
 
