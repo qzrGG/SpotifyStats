@@ -7,7 +7,7 @@ import "./Stats.css";
 import OtherUnits from './OtherUnits';
 import Attachment from './Attachment';
 import { from } from 'linq-to-typescript';
-import { ListeningEntry } from '../models/ListeningEntry';
+import { ListeningEntry } from '../models/listeningEntry';
 
 export interface StatsProps {
 }

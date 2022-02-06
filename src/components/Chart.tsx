@@ -2,7 +2,7 @@ import { Component } from "react";
 import React from "react";
 import { ButtonGroup, Button } from "reactstrap";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip, ResponsiveContainer } from "recharts";
-import { ListeningEntry } from "../models/ListeningEntry";
+import { ListeningEntry } from "../models/listeningEntry";
 import { from, range } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
 import { minutes, round } from "../common/math.helper";

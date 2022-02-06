@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { ListeningEntry } from "./ListeningEntry";
+import { ListeningEntry } from "./listeningEntry";
 
 export interface StatRow {
     trackName: string;

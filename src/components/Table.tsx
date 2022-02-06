@@ -7,7 +7,7 @@ import Comparer from "../models/Comparer";
 import { minutes, round } from "../common/math.helper";
 import { StatRow } from "../models/StatRow";
 import { Ranking } from "./Ranking";
-import { ListeningEntry } from "../models/ListeningEntry";
+import { ListeningEntry } from "../models/listeningEntry";
 import { Chart } from "./Chart";
 
 interface TabProps {
