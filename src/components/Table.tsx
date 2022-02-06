@@ -1,5 +1,5 @@
 import { from } from "linq-to-typescript";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ButtonGroup, Button } from "reactstrap";
 import "./Table.css";
 import Comparer from "../models/Comparer";
@@ -7,12 +7,10 @@ import { minutes, round } from "../common/math.helper";
 import { StatRow } from "../models/StatRow";
 import Ranking from "./Ranking";
 import { ListeningEntry } from "../models/listeningEntry";
-import { Chart } from "./Chart";
+import Chart from "./Chart";
+import StatsContext from "./StatsContext";
 
 interface TabProps {
-  listeningHistory: ListeningEntry[];
-  since: Date;
-  to: Date;
 }
 
 interface TabState {
@@ -52,8 +50,10 @@ const Table: React.FC<TabProps> = (props) => {
     }
   }
 
+  const context = useContext(StatsContext);
+
   useEffect(() => {
-    let result = from(props.listeningHistory)
+    let result = from(context.listeningHistory)
       .groupBy(groupByProperty(state.tableType))
       .select(x => ({ x, count: x.count(), sum: x.sum(t => t.msPlayed) }))
       .orderByDescending(x => x.count, Comparer)
@@ -84,7 +84,7 @@ const Table: React.FC<TabProps> = (props) => {
       result = result.reverse();
 
     setState(s => ({ ...s, data: result.toArray() }));
-  }, [props.listeningHistory, state.descendingOrder, state.orderByColumn, state.searchPhrase, state.tableType]);
+  }, [context.listeningHistory, state.descendingOrder, state.orderByColumn, state.searchPhrase, state.tableType]);
 
   const orderByChanged = (column: number) => {
     if (state.orderByColumn === column)
@@ -156,7 +156,7 @@ const Table: React.FC<TabProps> = (props) => {
       </div>
 
       <Ranking data={state.data} columns={columns} onSubsetChanged={onRowSelected} />
-      <Chart listeningHistory={state.listeningHistorySubset} description={`Details for ${state.subsetDescription}`} since={props.since} to={props.to} />
+      <Chart description={`Details for ${state.subsetDescription}`} subset={state.listeningHistorySubset} />
 
     </React.Fragment>
   );

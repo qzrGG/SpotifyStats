@@ -3,7 +3,7 @@ import './App.css';
 import { Layout } from './components/Layout';
 import { Route } from 'react-router';
 import { Home } from './components/Home';
-import { Stats } from './components/Stats';
+import Stats from './components/Stats';
 import { HashRouter } from 'react-router-dom';
 import About from './components/About';
 

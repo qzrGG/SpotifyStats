@@ -1,12 +1,14 @@
-import React from "react";
-import { ListeningEntry } from "../models/listeningEntry";
+import React, { useContext } from "react";
 import { from } from "linq-to-typescript";
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip } from "recharts";
 import Comparer from "../models/Comparer";
 import { round } from "../common/math.helper";
+import StatsContext from "./StatsContext";
 
-const Attachment: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
-  const data = from(props.listeningHistory);
+const Attachment: React.FC = () => {
+  const context = useContext(StatsContext);
+
+  const data = from(context.listeningHistory);
 
   const totalPlayCount = data.count();
 

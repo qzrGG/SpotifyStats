@@ -1,10 +1,12 @@
-import React from "react";
-import { ListeningEntry } from "../models/listeningEntry";
+import React, { useContext } from "react";
 import { from } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
+import StatsContext from "./StatsContext";
 
-const Summary: React.FC<{ listeningHistory: ListeningEntry[], since: Date, to: Date }> = (props) => {
-  const data = from(props.listeningHistory);
+const Summary: React.FC = () => {
+  const context = useContext(StatsContext);
+
+  const data = from(context.listeningHistory);
 
   const totalListeningTime = Math.round(data.sum(x => x.msPlayed) / 60000);
   const totalPlayCount = data.count();
@@ -39,7 +41,7 @@ const Summary: React.FC<{ listeningHistory: ListeningEntry[], since: Date, to: D
       <span className="section-header mb-3">Summary</span>
 
       <p className="text-center" style={{fontSize: "large"}}>
-        Since {props.since.toLocaleDateString()} to {props.to.toLocaleDateString()} you've listened to <br />
+        Since {context.since.toLocaleDateString()} to {context.to.toLocaleDateString()} you've listened to <br />
         <span className="display-4">{summary.totalPlayCount} tracks</span>  <br />
         for a total of <br /><span className="display-4">{summary.totalListeningTimeMinutes} minutes</span>  <br />
         or <span className="display-4"> {summary.totalListeningTimeSummary}</span>.

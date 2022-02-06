@@ -1,10 +1,11 @@
-import React from "react";
-import { ListeningEntry } from "../models/listeningEntry";
+import React, { useContext } from "react";
 import { from } from "linq-to-typescript";
 import { round } from "../common/math.helper";
+import StatsContext from "./StatsContext";
 
-const OtherUnits: React.FC<{ listeningHistory: ListeningEntry[] }> = (props) => {
-  const data = from(props.listeningHistory);
+const OtherUnits: React.FC = () => {
+  const context = useContext(StatsContext);
+  const data = from(context.listeningHistory);
 
   const totalListeningTime = data.sum(x => x.msPlayed) / 60000;
 
