@@ -11,7 +11,7 @@
     "bootstrap": "^4.4.1",
     "fs": "^0.0.1-security",
     "linq-to-typescript": "^9.0.0",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "overlayscrollbars": "^1.13.1",
     "overlayscrollbars-react": "^0.2.3",
     "react": "^16.12.0",
