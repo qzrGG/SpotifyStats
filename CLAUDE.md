@@ -6,12 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 SpotifyStats is a React application that visualizes Spotify listening history. Users upload their Spotify data files (obtained from https://www.spotify.com/account/privacy/) and the app generates statistics, charts, and rankings.
 
+## Package Manager
+
+This project uses **yarn** as the package manager. Always use `yarn` commands instead of `npm`.
+
 ## Commands
 
 ### Development
-- `npm start` - Start development server
-- `npm run build` - Build production bundle
-- `npm test` - Run tests
+- `yarn start` - Start development server
+- `yarn build` - Build production bundle
+- `yarn test` - Run tests
 
 ## Architecture
 

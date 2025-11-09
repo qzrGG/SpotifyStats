@@ -4,9 +4,10 @@ import StatsContext from './StatsContext';
 
 enum TimePeriod {
   All = 0,
-  Last12Months = 1,
-  LastMonth = 2,
-  Custom = 3
+  ThisYear = 1,
+  Last12Months = 2,
+  LastMonth = 3,
+  Custom = 4
 }
 
 const TimePeriodSelector: React.FC = () => {
@@ -42,6 +43,10 @@ const TimePeriodSelector: React.FC = () => {
       case TimePeriod.All:
         since = context.dataSince;
         to = context.dataTo;
+        break;
+      case TimePeriod.ThisYear:
+        to = now;
+        since = new Date(now.getFullYear(), 0, 1); // January 1st of current year
         break;
       case TimePeriod.Last12Months:
         to = now;
@@ -84,6 +89,13 @@ const TimePeriodSelector: React.FC = () => {
             onClick={() => handlePeriodChange(TimePeriod.All)}
           >
             All
+          </Button>
+          <Button
+            active={selectedPeriod === TimePeriod.ThisYear}
+            color="primary"
+            onClick={() => handlePeriodChange(TimePeriod.ThisYear)}
+          >
+            This Year
           </Button>
           <Button
             active={selectedPeriod === TimePeriod.Last12Months}

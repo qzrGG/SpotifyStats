@@ -3,6 +3,7 @@ import { from } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
 import StatsContext from "./StatsContext";
 import { useStatsCache } from "../hooks/useStatsCache";
+import TimePeriodSelector from "./TimePeriodSelector";
 
 const Summary: React.FC = () => {
   const context = useContext(StatsContext);
@@ -42,6 +43,8 @@ const Summary: React.FC = () => {
   return (
     <React.Fragment>
       <span className="section-header mb-3">Summary</span>
+
+      <TimePeriodSelector />
 
       <p className="text-center" style={{fontSize: "large"}}>
         Since {context.since.toLocaleDateString()} to {context.to.toLocaleDateString()} you've listened to <br />
