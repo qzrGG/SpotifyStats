@@ -88,7 +88,7 @@ const Chart: React.FC<ChartProps> = (props) => {
         <Button active={state.chartFuncId === 1} color="primary" onClick={() => setState({ chartFuncId: 1 })}>Days of week</Button>
         <Button active={state.chartFuncId === 2} color="primary" onClick={() => setState({ chartFuncId: 2 })}>Months</Button>
       </ButtonGroup>
-      <ResponsiveContainer width="100%" height="70%">
+      <ResponsiveContainer width="100%" height={400}>
         <LineChart
           data={chartData}
         >
