@@ -164,7 +164,7 @@ const Table: React.FC<TabProps> = (props) => {
       </div>
 
       <Ranking data={state.data} columns={columns} onSubsetChanged={onRowSelected} />
-      <Chart description={`Details for ${state.subsetDescription}`} subset={state.listeningHistorySubset} />
+      <Chart description={`Details for ${state.subsetDescription}`} subset={state.listeningHistorySubset} compact={true} />
 
     </React.Fragment>
   );

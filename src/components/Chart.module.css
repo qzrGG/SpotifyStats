@@ -1,0 +1,270 @@
+.chartContainer {
+  padding: 35px 25px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  border: 2px solid rgba(0, 215, 111, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.chartContainer:hover {
+  border-color: rgba(0, 215, 111, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 215, 111, 0.12);
+}
+
+.chartContainerCompact {
+  padding: 25px 20px;
+  background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 215, 111, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.headerCompact {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  letter-spacing: 0.3px;
+}
+
+.titleCompact {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.controlsCompact {
+  gap: 10px;
+}
+
+.metricToggle {
+  display: flex;
+  background: rgba(26, 26, 46, 0.06);
+  border-radius: 25px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.metricButton {
+  padding: 8px 18px;
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.metricButton:hover {
+  background: rgba(0, 215, 111, 0.1);
+  color: #1a1a2e;
+}
+
+.metricButton.active {
+  background: linear-gradient(135deg, #00d76f 0%, #00ff88 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 215, 111, 0.3);
+}
+
+.metricButtonCompact {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.periodSelector {
+  display: flex;
+  background: rgba(26, 26, 46, 0.06);
+  border-radius: 25px;
+  padding: 4px;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.periodButton {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  color: #666;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.periodButton:hover {
+  background: rgba(0, 215, 111, 0.1);
+  color: #1a1a2e;
+}
+
+.periodButton.active {
+  background: linear-gradient(135deg, #00d76f 0%, #00ff88 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 215, 111, 0.3);
+}
+
+.periodButtonCompact {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+
+.chartWrapper {
+  margin-top: 20px;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.chartWrapperCompact {
+  padding: 15px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  opacity: 0.3;
+}
+
+.emptyText {
+  font-size: 1.1rem;
+  color: #666;
+  font-weight: 400;
+}
+
+.tooltip {
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 215, 111, 0.3);
+  min-width: 280px;
+}
+
+.tooltipLabel {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #00ff88;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tooltipRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.tooltipRowLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+}
+
+.tooltipRowValue {
+  font-weight: 600;
+  color: white;
+}
+
+.tooltipHighlight {
+  background: rgba(0, 215, 111, 0.15);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-top: 8px;
+  border-left: 3px solid #00ff88;
+}
+
+.tooltipHighlightText {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chartContainer {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chartContainer {
+    padding: 25px 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .metricToggle,
+  .periodSelector {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tooltip {
+    min-width: 240px;
+  }
+}

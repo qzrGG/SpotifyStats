@@ -226,7 +226,7 @@ const Stats: React.FC<StatsProps> = (props) => {
                 <OtherUnits />
               </section>
               <section id="chart">
-                <Chart description="Music over time" />
+                <Chart description="Music over time" compact={false} />
               </section>
               <section id="table">
                 <Table />
