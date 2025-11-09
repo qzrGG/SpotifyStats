@@ -1,0 +1,409 @@
+.tableContainer {
+  padding: 35px 25px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  border: 2px solid rgba(0, 215, 111, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.tableContainer:hover {
+  border-color: rgba(0, 215, 111, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 215, 111, 0.12);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  letter-spacing: 0.3px;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 18px;
+  color: #666;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 45px 10px 45px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #00d76f;
+  box-shadow: 0 0 0 3px rgba(0, 215, 111, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #999;
+}
+
+.clearButton {
+  position: absolute;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.clearButton:hover {
+  color: #666;
+}
+
+.itemCount {
+  font-size: 0.9rem;
+  color: #666;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.modeToggle {
+  display: flex;
+  background: rgba(26, 26, 46, 0.06);
+  border-radius: 25px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.modeButton {
+  padding: 8px 18px;
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.modeButton:hover {
+  background: rgba(0, 215, 111, 0.1);
+  color: #1a1a2e;
+}
+
+.modeButton.active {
+  background: linear-gradient(135deg, #00d76f 0%, #00ff88 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 215, 111, 0.3);
+}
+
+.actionButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.actionButton {
+  padding: 8px 16px;
+  background: white;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  color: #666;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.actionButton:hover {
+  background: rgba(0, 215, 111, 0.1);
+  border-color: #00d76f;
+  color: #1a1a2e;
+}
+
+.filterBadge {
+  background: linear-gradient(135deg, #00d76f 0%, #00ff88 100%);
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.filtersPanel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 215, 111, 0.2);
+  animation: slideDown 0.3s ease-out;
+}
+
+.filtersTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 15px;
+}
+
+.filtersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filterLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.filterInputGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filterInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.filterInput:focus {
+  outline: none;
+  border-color: #00d76f;
+}
+
+.filterSeparator {
+  color: #999;
+  font-weight: 600;
+}
+
+.tableWrapper {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.tableHeader {
+  display: flex;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-bottom: 2px solid rgba(0, 215, 111, 0.2);
+  padding: 0 10px;
+}
+
+.headerCell {
+  padding: 16px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1a1a2e;
+}
+
+.headerCell:hover {
+  background: rgba(0, 215, 111, 0.05);
+  color: #00d76f;
+}
+
+.headerCell.sorted {
+  color: #00d76f;
+}
+
+.sortIcon {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.sortIcon.descending {
+  transform: rotate(180deg);
+}
+
+.tableBody {
+  border-bottom: 2px solid rgba(0, 215, 111, 0.1);
+}
+
+.tableRow {
+  display: flex;
+  padding: 0 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.tableRow:hover {
+  background: linear-gradient(90deg, rgba(0, 215, 111, 0.05) 0%, rgba(0, 255, 136, 0.05) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 215, 111, 0.1);
+}
+
+.tableRow.selected {
+  background: linear-gradient(90deg, rgba(0, 215, 111, 0.1) 0%, rgba(0, 255, 136, 0.1) 100%);
+  border-left: 4px solid #00d76f;
+  padding-left: 6px;
+}
+
+.tableRow.selected:hover {
+  background: linear-gradient(90deg, rgba(0, 215, 111, 0.15) 0%, rgba(0, 255, 136, 0.15) 100%);
+}
+
+.tableCell {
+  padding: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.rightAlign {
+  justify-content: flex-end;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  opacity: 0.3;
+}
+
+.emptyText {
+  font-size: 1.1rem;
+  color: #666;
+  font-weight: 400;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tableContainer {
+    padding: 25px 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .searchContainer {
+    max-width: 100%;
+  }
+
+  .modeToggle,
+  .actionButtons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .filtersGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tableHeader,
+  .tableRow {
+    font-size: 0.85rem;
+  }
+
+  .headerCell,
+  .tableCell {
+    padding: 10px 8px;
+  }
+}

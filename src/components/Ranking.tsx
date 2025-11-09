@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import React from "react";
 import { FixedSizeList } from "react-window";
-import "./Table.css";
+import styles from "./Table.module.css";
 import { StatColumn, StatRow } from "../models/StatRow";
 import Scrollbars from "react-custom-scrollbars-2";
 
@@ -9,6 +9,7 @@ interface RankingProps {
   onSubsetChanged: (subset: StatRow) => void;
   data: StatRow[];
   columns: StatColumn[];
+  selectedRowId: number | null;
 }
 
 const Ranking: React.FC<RankingProps> = (props) => {
@@ -22,13 +23,36 @@ const Ranking: React.FC<RankingProps> = (props) => {
     props.onSubsetChanged(row);
   }
 
-  const Row = ({ index, style }: any) => (
-    <div className="d-flex stats-row" style={style} onClick={_ => onRowSelected(props.data[index])}>
-      {props.columns.map((x) => (
-        <div key={x.header} style={x.style} className="data-cell">{x.selector(props.data[index])}</div>
-      ))}
-    </div>
-  );
+  // Create itemData to pass to Row component
+  const itemData = {
+    data: props.data,
+    columns: props.columns,
+    selectedRowId: props.selectedRowId,
+    onRowSelected: onRowSelected
+  };
+
+  const Row = ({ index, style, data }: any) => {
+    const row = data.data[index];
+    const isSelected = row.id === data.selectedRowId;
+
+    return (
+      <div
+        className={`${styles.tableRow} ${isSelected ? styles.selected : ''}`}
+        style={style}
+        onClick={_ => data.onRowSelected(row)}
+      >
+        {data.columns.map((x: any) => (
+          <div
+            key={x.header}
+            style={x.style}
+            className={`${styles.tableCell} ${x.alignRight ? styles.rightAlign : ''}`}
+          >
+            {x.selector(row)}
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   const CustomScrollbars = ({ onScroll, forwardedRef, style, children }: any) => {
     const refSetter = useCallback(scrollbarsRef => {
@@ -55,14 +79,15 @@ const Ranking: React.FC<RankingProps> = (props) => {
   ));
 
   return (
-    <div className="data-items mb-2">
+    <div className={styles.tableBody}>
       <FixedSizeList
         height={400}
         itemCount={props.data.length}
-        itemSize={40}
+        itemSize={48}
         width="100%"
         outerElementType={CustomScrollbarsVirtualList}
         ref={listRef}
+        itemData={itemData}
       >
         {Row}
       </FixedSizeList>
@@ -71,7 +96,7 @@ const Ranking: React.FC<RankingProps> = (props) => {
 }
 
 const areEqual = (prevProps: RankingProps, nextProps: RankingProps): boolean => {
-  return prevProps.data === nextProps.data;
- }
+  return prevProps.data === nextProps.data && prevProps.selectedRowId === nextProps.selectedRowId;
+}
 
 export default React.memo(Ranking, areEqual);

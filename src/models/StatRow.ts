@@ -13,5 +13,6 @@ export interface StatRow {
 export interface StatColumn {
     header: string,
     selector: (x: StatRow) => any,
-    style: CSSProperties
+    style: CSSProperties,
+    alignRight?: boolean
 }
