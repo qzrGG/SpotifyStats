@@ -1,4 +1,6 @@
 name: Build and Deploy
+permissions:
+  contents: write
 on:
   push:	
     branches:	
@@ -20,8 +22,7 @@ jobs:
       env:
         CI: false
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
+      uses: JamesIves/github-pages-deploy-action@releases/v4
       with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: build
+        branch: gh-pages
+        folder: build
