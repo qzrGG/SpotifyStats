@@ -2,39 +2,42 @@ import React, { useContext } from "react";
 import { from } from "linq-to-typescript";
 import Comparer from "../models/Comparer";
 import StatsContext from "./StatsContext";
+import { useStatsCache } from "../hooks/useStatsCache";
 
 const Summary: React.FC = () => {
   const context = useContext(StatsContext);
 
-  const data = from(context.listeningHistory);
+  const summary = useStatsCache((entries) => {
+    const data = from(entries);
 
-  const totalListeningTime = Math.round(data.sum(x => x.msPlayed) / 60000);
-  const totalPlayCount = data.count();
+    const totalListeningTime = Math.round(data.sum(x => x.msPlayed) / 60000);
+    const totalPlayCount = data.count();
 
-  const differentTracks = data.select(x => x.artistName + x.trackName).distinct().count();
-  const differentArtists = data.select(x => x.artistName).distinct().count();
+    const differentTracks = data.select(x => x.artistName + x.trackName).distinct().count();
+    const differentArtists = data.select(x => x.artistName).distinct().count();
 
-  const top10TracksPlayCount = data.groupBy(x => x.trackName + x.artistName)
-    .select(x => x.count())
-    .orderByDescending(x => x, Comparer)
-    .take(Math.round(differentTracks / 10))
-    .sum();
+    const top10TracksPlayCount = data.groupBy(x => x.trackName + x.artistName)
+      .select(x => x.count())
+      .orderByDescending(x => x, Comparer)
+      .take(Math.round(differentTracks / 10))
+      .sum();
 
-  const top10ArtistsPlayCount = data.groupBy(x => x.artistName)
-    .select(x => x.count())
-    .orderByDescending(x => x)
-    .take(Math.round(differentArtists / 10))
-    .sum();
+    const top10ArtistsPlayCount = data.groupBy(x => x.artistName)
+      .select(x => x.count())
+      .orderByDescending(x => x)
+      .take(Math.round(differentArtists / 10))
+      .sum();
 
-  const summary = {
-    totalListeningTimeMinutes: totalListeningTime,
-    totalListeningTimeSummary: `${Math.floor(totalListeningTime / 1440)} days, ${Math.floor(totalListeningTime / 60 % 24)} hours and ${Math.floor(totalListeningTime % 60)} minutes`,
-    totalPlayCount: totalPlayCount,
-    differentTracks: differentTracks,
-    differentArtists: differentArtists,
-    top10tracksShare: top10TracksPlayCount / totalPlayCount,
-    top10artistsShare: top10ArtistsPlayCount / totalPlayCount,
-  };
+    return {
+      totalListeningTimeMinutes: totalListeningTime,
+      totalListeningTimeSummary: `${Math.floor(totalListeningTime / 1440)} days, ${Math.floor(totalListeningTime / 60 % 24)} hours and ${Math.floor(totalListeningTime % 60)} minutes`,
+      totalPlayCount: totalPlayCount,
+      differentTracks: differentTracks,
+      differentArtists: differentArtists,
+      top10tracksShare: top10TracksPlayCount / totalPlayCount,
+      top10artistsShare: top10ArtistsPlayCount / totalPlayCount,
+    };
+  }, context.listeningHistory, context.since, context.to);
 
   return (
     <React.Fragment>

@@ -1,5 +1,5 @@
 import { from } from "linq-to-typescript";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { ButtonGroup, Button } from "reactstrap";
 import "./Table.css";
 import Comparer from "../models/Comparer";
@@ -9,6 +9,7 @@ import Ranking from "./Ranking";
 import { ListeningEntry } from "../models/listeningEntry";
 import Chart from "./Chart";
 import StatsContext from "./StatsContext";
+import { useStatsCache } from "../hooks/useStatsCache";
 
 interface TabProps {
 }
@@ -52,8 +53,9 @@ const Table: React.FC<TabProps> = (props) => {
 
   const context = useContext(StatsContext);
 
-  useEffect(() => {
-    let result = from(context.listeningHistory)
+  // Memoize the base grouped data - this is the most expensive operation
+  const groupedData = useStatsCache((entries) => {
+    return from(entries)
       .groupBy(groupByProperty(state.tableType))
       .select(x => ({ x, count: x.count(), sum: x.sum(t => t.msPlayed) }))
       .orderByDescending(x => x.count, Comparer)
@@ -68,6 +70,12 @@ const Table: React.FC<TabProps> = (props) => {
           entries: x.toArray()
         }
       })
+      .toArray();
+  }, context.listeningHistory, context.since, context.to, [state.tableType]);
+
+  // Apply filtering and sorting to the grouped data
+  useEffect(() => {
+    let result = from(groupedData)
       .where(x => x.artistName.toLowerCase().indexOf(state.searchPhrase) > -1
         || (state.tableType === TableType.trackAndArtist && x.trackName.toLowerCase().indexOf(state.searchPhrase) > -1)
       );
@@ -84,7 +92,7 @@ const Table: React.FC<TabProps> = (props) => {
       result = result.reverse();
 
     setState(s => ({ ...s, data: result.toArray() }));
-  }, [context.listeningHistory, state.descendingOrder, state.orderByColumn, state.searchPhrase, state.tableType]);
+  }, [groupedData, state.descendingOrder, state.orderByColumn, state.searchPhrase, state.tableType]);
 
   const orderByChanged = (column: number) => {
     if (state.orderByColumn === column)

@@ -4,44 +4,49 @@ import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Line, Tool
 import Comparer from "../models/Comparer";
 import { round } from "../common/math.helper";
 import StatsContext from "./StatsContext";
+import { useStatsCache } from "../hooks/useStatsCache";
 
 const Attachment: React.FC = () => {
   const context = useContext(StatsContext);
 
-  const data = from(context.listeningHistory);
+  const { chartData, varietyArtists, varietyTracks, differentArtists, differentTracks } = useStatsCache((entries) => {
+    const data = from(entries);
 
-  const totalPlayCount = data.count();
+    const totalPlayCount = data.count();
 
-  const differentTracks = data.select(x => x.artistName + x.trackName).distinct().count();
-  const differentArtists = data.select(x => x.artistName).distinct().count();
+    const differentTracks = data.select(x => x.artistName + x.trackName).distinct().count();
+    const differentArtists = data.select(x => x.artistName).distinct().count();
 
-  const topTracksPlayCount = data.groupBy(x => x.trackName + x.artistName)
-    .select(x => x.count())
-    .orderByDescending(x => x, Comparer)
-    .aggregate({ result: Array.from([0]), i: 0 }, (x, y) => {
-      if (x.i * 100 >= x.result.length * differentTracks)
-        x.result.push(y + x.result[x.result.length - 1]);
-      else
-        x.result[x.result.length - 1] += y;
-      x.i++;
-      return x;
-    }).result;
+    const topTracksPlayCount = data.groupBy(x => x.trackName + x.artistName)
+      .select(x => x.count())
+      .orderByDescending(x => x, Comparer)
+      .aggregate({ result: Array.from([0]), i: 0 }, (x, y) => {
+        if (x.i * 100 >= x.result.length * differentTracks)
+          x.result.push(y + x.result[x.result.length - 1]);
+        else
+          x.result[x.result.length - 1] += y;
+        x.i++;
+        return x;
+      }).result;
 
-  let topArtistsPlayCount = data.groupBy(x => x.artistName)
-    .select(x => x.count())
-    .orderByDescending(x => x, Comparer)
-    .aggregate({ result: Array.from([0]), i: 0 }, (x, y) => {
-      if (x.i * 100 >= x.result.length * differentArtists)
-        x.result.push(y + x.result[x.result.length - 1]);
-      else
-        x.result[x.result.length - 1] += y;
-      x.i++;
-      return x;
-    }).result;
-    topArtistsPlayCount = [0, ...topArtistsPlayCount];
-  const chartData = [0, ...topTracksPlayCount].map((x, i) => ({ top: i, Tracks: Math.round(x / totalPlayCount * 10000) / 100, Artists: Math.round(topArtistsPlayCount[i] / totalPlayCount * 10000) / 100}));
-  const varietyArtists = round(from(chartData).aggregate(5000, (sum, datapoint) => sum -= (datapoint.Artists - datapoint.top))/50, 2);
-  const varietyTracks = round(from(chartData).aggregate(5000, (sum, datapoint) => sum -= (datapoint.Tracks - datapoint.top))/50, 2);
+    let topArtistsPlayCount = data.groupBy(x => x.artistName)
+      .select(x => x.count())
+      .orderByDescending(x => x, Comparer)
+      .aggregate({ result: Array.from([0]), i: 0 }, (x, y) => {
+        if (x.i * 100 >= x.result.length * differentArtists)
+          x.result.push(y + x.result[x.result.length - 1]);
+        else
+          x.result[x.result.length - 1] += y;
+        x.i++;
+        return x;
+      }).result;
+      topArtistsPlayCount = [0, ...topArtistsPlayCount];
+    const chartData = [0, ...topTracksPlayCount].map((x, i) => ({ top: i, Tracks: Math.round(x / totalPlayCount * 10000) / 100, Artists: Math.round(topArtistsPlayCount[i] / totalPlayCount * 10000) / 100}));
+    const varietyArtists = round(from(chartData).aggregate(5000, (sum, datapoint) => sum -= (datapoint.Artists - datapoint.top))/50, 2);
+    const varietyTracks = round(from(chartData).aggregate(5000, (sum, datapoint) => sum -= (datapoint.Tracks - datapoint.top))/50, 2);
+
+    return { chartData, varietyArtists, varietyTracks, differentArtists, differentTracks };
+  }, context.listeningHistory, context.since, context.to);
 
   return (
     <React.Fragment>

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 import React from "react";
 import { ButtonGroup, Button } from "reactstrap";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip, ResponsiveContainer } from "recharts";
@@ -7,6 +7,7 @@ import Comparer from "../models/Comparer";
 import { minutes, round } from "../common/math.helper";
 import StatsContext from "./StatsContext";
 import { ListeningEntry } from "../models/listeningEntry";
+import { useStatsCache } from "../hooks/useStatsCache";
 
 export interface ChartProps {
   description: string;
@@ -50,26 +51,29 @@ const Chart: React.FC<ChartProps> = (props) => {
     return monthValue(nthDate);
   }
 
-  const emptyData: { name: number, totalTime: number, totalPlaybacks: number, mostPlayedTrack: string, mostPlayedArtist: string }[][] = [
+  const emptyData = useMemo(() => [
     range(0, 24).select(x => ({ name: x, totalTime: 0, totalPlaybacks: 0, mostPlayedTrack: "", mostPlayedArtist: "" })).toArray(),
     range(1, 7).select(x => ({ name: x, totalTime: 0, totalPlaybacks: 0, mostPlayedTrack: "", mostPlayedArtist: "" })).toArray(),
     range(0, monthDiff(context.since, context.to)).select(x => ({ name: nthMonth(x), totalTime: 0, totalPlaybacks: 0, mostPlayedTrack: "", mostPlayedArtist: "" })).toArray()
-  ];
+  ], [context.since, context.to]);
 
 
-  const chartData = from(props.subset !== undefined ? props.subset : context.listeningHistory)
-    .groupBy(x => chartFuncs[state.chartFuncId](x.date))
-    .select(g => ({
-      name: g.key,
-      totalTime: round(g.sum(x => x.msPlayed) / 60000, 2),
-      totalPlaybacks: g.count(),
-      mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count(), Comparer).first().take(1).select(x => `${x.trackName} by ${x.artistName}`).first(),
-      mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count(), Comparer).first().key
-    }))
-    .union(emptyData[state.chartFuncId])
-    .groupBy(x => x.name)
-    .select(x => x.first())
-    .toArray();
+  const dataToUse = props.subset !== undefined ? props.subset : context.listeningHistory;
+  const chartData = useStatsCache((entries) => {
+    return from(entries)
+      .groupBy(x => chartFuncs[state.chartFuncId](x.date))
+      .select(g => ({
+        name: g.key,
+        totalTime: round(g.sum(x => x.msPlayed) / 60000, 2),
+        totalPlaybacks: g.count(),
+        mostPlayedTrack: g.groupBy(x => x.trackName).orderByDescending(x => x.count(), Comparer).first().take(1).select(x => `${x.trackName} by ${x.artistName}`).first(),
+        mostPlayedArtist: g.groupBy(x => x.artistName).orderByDescending(x => x.count(), Comparer).first().key
+      }))
+      .union(emptyData[state.chartFuncId])
+      .groupBy(x => x.name)
+      .select(x => x.first())
+      .toArray();
+  }, dataToUse, context.since, context.to, [state.chartFuncId, emptyData[state.chartFuncId]]);
 
   if (props.subset !== undefined && props.subset.length === 0) {
     return (<p>Select a track or an artist in the table to see it's details</p>);

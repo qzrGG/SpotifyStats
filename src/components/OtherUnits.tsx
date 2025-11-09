@@ -2,12 +2,15 @@ import React, { useContext } from "react";
 import { from } from "linq-to-typescript";
 import { round } from "../common/math.helper";
 import StatsContext from "./StatsContext";
+import { useStatsCache } from "../hooks/useStatsCache";
 
 const OtherUnits: React.FC = () => {
   const context = useContext(StatsContext);
-  const data = from(context.listeningHistory);
 
-  const totalListeningTime = data.sum(x => x.msPlayed) / 60000;
+  const totalListeningTime = useStatsCache((entries) => {
+    const data = from(entries);
+    return data.sum(x => x.msPlayed) / 60000;
+  }, context.listeningHistory, context.since, context.to);
 
   return (
     <div style={{fontSize: "x-large", fontWeight: 300}}>
