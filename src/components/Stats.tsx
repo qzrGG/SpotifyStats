@@ -44,7 +44,7 @@ const Stats: React.FC<StatsProps> = (props) => {
   }, [state.files]);
 
   const loadFiles = (files: File[]) => {
-    const filesToLoad = files.filter(x => x.name.startsWith("StreamingHistory"));
+    const filesToLoad = files.filter(x => x.name.startsWith("StreamingHistory") || x.name.startsWith("Streaming_History_Audio"));
     setState({ ...state, progress: 1, files: filesToLoad });
   }
 
