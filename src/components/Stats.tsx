@@ -6,10 +6,10 @@ import Summary from './Summary';
 import "./Stats.css";
 import OtherUnits from './OtherUnits';
 import Attachment from './Attachment';
-import TimePeriodSelector from './TimePeriodSelector';
 import { from } from 'linq-to-typescript';
 import { ListeningEntry, ExtendedListeningEntry } from '../models/listeningEntry';
 import { StatsData, StatsProvider } from './StatsContext';
+import { convertUtcToLocalTime } from '../utils/timezoneUtils';
 
 interface StatsProps {
 }
@@ -43,9 +43,12 @@ const Stats: React.FC<StatsProps> = (props) => {
       return null;
     }
 
+    // Convert UTC timestamp to local time based on country (handles DST automatically)
+    const { date, formatted } = convertUtcToLocalTime(entry.ts, entry.conn_country);
+
     return {
-      endTime: entry.ts.replace('Z', '').replace('T', ' ').substring(0, 16),
-      date: new Date(entry.ts),
+      endTime: formatted,
+      date: date,
       artistName: entry.master_metadata_album_artist_name,
       trackName: entry.master_metadata_track_name,
       msPlayed: entry.ms_played
@@ -199,9 +202,6 @@ const Stats: React.FC<StatsProps> = (props) => {
       (
         <React.Fragment>
           <StatsProvider value={state.data}>
-            <section id="time-period" className="container mt-4">
-              <TimePeriodSelector />
-            </section>
             <div style={{ position: 'relative', opacity: state.data.isCalculating ? 0.5 : 1, pointerEvents: state.data.isCalculating ? 'none' : 'auto' }}>
               {state.data.isCalculating && (
                 <div style={{

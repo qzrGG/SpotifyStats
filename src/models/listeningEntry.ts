@@ -11,4 +11,5 @@ export interface ExtendedListeningEntry {
     ms_played: number;
     master_metadata_track_name: string | null;
     master_metadata_album_artist_name: string | null;
+    conn_country: string;
 }
